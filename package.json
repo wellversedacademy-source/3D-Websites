@@ -1,0 +1,8 @@
+{
+  "name": "3d-websites",
+  "private": true,
+  "description": "Scroll-driven websites built with the scroll-craft skill",
+  "devDependencies": {
+    "playwright-core": "1.63.0"
+  }
+}
