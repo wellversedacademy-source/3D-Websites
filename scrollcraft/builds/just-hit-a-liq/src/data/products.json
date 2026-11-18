@@ -238,7 +238,7 @@
       "status": "coming-soon",
       "price": null,
       "model": null,
-      "photos": false,
+      "photos": true,
       "summary": "About 420 GSM structured cotton twill, fully lined, an atelier edition of 50.",
       "description": "The most subtle piece in the collection and the rarest. Tailored, boxy and cropped, with a tonal LiQ on the chest and back, and PRICE SEEKS LIQUIDITY beneath the back graphic.",
       "details": [
@@ -252,7 +252,16 @@
         "Chest: tonal LiQ embroidery with the cobalt line. Back: tonal LiQ, cobalt level, price ladder, PRICE SEEKS LIQUIDITY",
         "Woven label: LiQ / DROP 001, garment number of 50"
       ],
-      "gallery": [],
+      "gallery": [
+        ["label", "Interior woven label, limited edition"],
+        ["zipper", "Two-way zipper, engraved LiQ"],
+        ["chest", "Chest embroidery, tonal"],
+        ["back", "Back graphic, low-contrast tonal"],
+        ["collar", "Collar and neckline construction"],
+        ["pocket", "Zip hand pocket"],
+        ["snap", "Waist adjuster, metal snap"],
+        ["twill", "Cotton twill, about 420 GSM"]
+      ],
       "edition": "Atelier edition of 50",
       "options": [
         { "name": "Colorway", "values": ["Black"] },
