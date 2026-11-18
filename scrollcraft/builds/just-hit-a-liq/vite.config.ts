@@ -57,12 +57,10 @@ type Img = { src: string; avif: boolean; alt: string; caption?: string };
 function images(p: P): Img[] {
   const out: Img[] = [];
   if (p.photos) {
-    for (const [v, label] of [
-      ['front', 'front'],
-      ['back', 'back'],
-      ['angle', 'three-quarter'],
-    ] as const)
-      out.push({ src: `/photos/${p.handle}-${v}`, avif: true, alt: `${p.title}, ${label} view` });
+    const views = ((p as { views?: string[] }).views ?? ['front', 'back', 'angle']) as string[];
+    const names: Record<string, string> = { front: 'front', back: 'back', angle: 'three-quarter' };
+    for (const v of views)
+      out.push({ src: `/photos/${p.handle}-${v}`, avif: true, alt: `${p.title}, ${names[v] ?? v} view` });
     for (const [key, caption] of p.gallery as [string, string][])
       out.push({
         src: `/photos/${p.handle}-detail-${key}`,

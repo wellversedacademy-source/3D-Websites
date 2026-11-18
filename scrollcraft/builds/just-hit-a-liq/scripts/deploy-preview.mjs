@@ -18,7 +18,7 @@ const LAB = path.join(ROOT, 'lab');
 const API = 'https://api.cloudflare.com/client/v4';
 const ACCOUNT = process.env.CLOUDFLARE_ACCOUNT_ID;
 const TOKEN = process.env.CLOUDFLARE_API_TOKEN;
-const NAME = 'just-hit-a-liq-preview';
+const NAME = process.env.PREVIEW_NAME || 'preview';
 if (!ACCOUNT || !TOKEN) throw new Error('Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN.');
 fs.mkdirSync(LAB, { recursive: true });
 

@@ -35,7 +35,7 @@ const jobs = [
   { url: '/?capture=hero', w: 1200, h: 630, out: 'og/og-default', jpg: true },
 ];
 // Pieces photographed on the owner's boards use those photos instead (crop-boards.mjs).
-for (const handle of ['cap']) {
+for (const handle of []) {
   jobs.push({ url: `/product/${handle}/?capture=front`, w: 1200, h: 1500, out: `renders/${handle}-front` });
   jobs.push({ url: `/product/${handle}/?capture=back`, w: 1200, h: 1500, out: `renders/${handle}-back` });
   jobs.push({

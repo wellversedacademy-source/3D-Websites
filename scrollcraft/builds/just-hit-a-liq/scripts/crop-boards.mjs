@@ -158,3 +158,62 @@ for (const [handle, b] of Object.entries(BOARDS)) {
   );
   console.log('cropped', handle);
 }
+
+// The cap board has its own layout (1536 x 1024, landscape): one large hero
+// photo, close-ups on the right, five small views along the bottom. The hero
+// becomes the 4:5 product image over a blurred extension of itself; the rest
+// become detail tiles.
+{
+  const handle = 'cap';
+  const src = path.join(SRC, `${handle}.webp`);
+  if (fs.existsSync(src)) {
+    const png = path.join(RAW, `${handle}-front.png`);
+    ff(
+      '-i',
+      src,
+      '-filter_complex',
+      '[0]crop=928:758:0:0,split[a][b];' +
+        '[a]scale=960:1200:force_original_aspect_ratio=increase,crop=960:1200,gblur=sigma=40,eq=brightness=-0.04[bg];' +
+        '[b]scale=960:-2:flags=lanczos[fg];[bg][fg]overlay=0:(H-h)/2',
+      png,
+    );
+    ff('-i', png, '-c:v', 'libwebp', '-quality', '86', path.join(OUT, `${handle}-front.webp`));
+    ff(
+      '-i',
+      png,
+      '-c:v',
+      'libaom-av1',
+      '-still-picture',
+      '1',
+      '-crf',
+      '28',
+      '-cpu-used',
+      '6',
+      path.join(OUT, `${handle}-front.avif`),
+    );
+    const details = {
+      embroidery: [935, 0, 601, 325],
+      label: [935, 330, 601, 225],
+      buckle: [935, 560, 262, 200],
+      brim: [1200, 560, 336, 200],
+      left: [285, 768, 292, 212],
+      rear: [650, 768, 280, 212],
+      right: [935, 768, 325, 212],
+    };
+    for (const [name, [x, y, w, h]] of Object.entries(details)) {
+      const dpng = path.join(RAW, `${handle}-detail-${name}.png`);
+      ff('-i', src, '-vf', `crop=${w}:${h}:${x}:${y},scale=-2:480:flags=lanczos`, dpng);
+      ff('-i', dpng, '-c:v', 'libwebp', '-quality', '86', path.join(OUT, `${handle}-detail-${name}.webp`));
+    }
+    ff(
+      '-i',
+      src,
+      '-vf',
+      'crop=928:758:0:0,scale=-2:630,pad=1200:630:(ow-iw)/2:0:color=0x1c1c1f',
+      '-q:v',
+      '3',
+      path.join(ROOT, 'public', 'og', `${handle}.jpg`),
+    );
+    console.log('cropped', handle);
+  }
+}

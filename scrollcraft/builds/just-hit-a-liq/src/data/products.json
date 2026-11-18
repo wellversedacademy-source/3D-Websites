@@ -277,8 +277,9 @@
       "role": "The accessory",
       "status": "coming-soon",
       "price": null,
-      "model": "cap",
-      "photos": false,
+      "model": null,
+      "photos": true,
+      "views": ["front"],
       "summary": "Black six-panel cap: JUST HIT A and the LiQ strike embroidered across the front.",
       "description": "The mark at its loudest: the LiQ embroidered across the front with a cobalt candlestick and level, red candles falling from the Q, the three sessions on the side, and a chart printed under the brim.",
       "details": [
@@ -289,7 +290,15 @@
         "Rear strap with brushed-metal LiQ buckle",
         "Woven label: JUST HIT A LiQ / DROP 001, garment number of 150"
       ],
-      "gallery": [],
+      "gallery": [
+        ["embroidery", "Front embroidery: cobalt candlestick and level, red candles"],
+        ["label", "Interior woven label"],
+        ["buckle", "Brushed-metal LiQ strap buckle"],
+        ["brim", "Under-brim chart print"],
+        ["left", "Left side: LIQUIDITY / STRUCTURE / EXECUTION"],
+        ["rear", "Rear view"],
+        ["right", "Right side: NY, LONDON and ASIA sessions"]
+      ],
       "edition": "Limited to 150",
       "options": [
         { "name": "Colorway", "values": ["Black"] },
