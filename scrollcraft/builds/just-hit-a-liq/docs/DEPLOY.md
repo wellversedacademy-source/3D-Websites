@@ -85,3 +85,24 @@ release access once (it should say *not open yet* unless KV is bound).
 Build-time values (see `.env.example`) are read by Vite when `npm run build`
 runs on your machine. None are secret except, by convention, the Shopify
 Storefront token. Never commit `.env`. No secrets are stored in this repository.
+
+## Preview deploys (current)
+
+Live preview: **https://just-hit-a-liq-preview.justhitaliq.workers.dev**
+(account workers.dev subdomain `justhitaliq`, registered 2026-11-18). It sends
+`X-Robots-Tag: noindex`, but anyone with the link can open it.
+
+It is served by `worker/preview.ts` from a KV namespace rather than Workers
+static assets, because the cloud workspace this site is built in rewrites the
+`Authorization` header on Cloudflare API calls, which breaks the static-asset
+upload step. To update it from that workspace:
+
+```bash
+npm run deploy:preview
+```
+
+(`CLOUDFLARE_ACCOUNT_ID` and a placeholder `CLOUDFLARE_API_TOKEN` must be set;
+the workspace proxy supplies the real token.) From your own computer, the normal
+`npm run deploy` in section B works and is what production should use. To
+remove the preview: Workers & Pages → `just-hit-a-liq-preview` → Settings →
+Delete.
