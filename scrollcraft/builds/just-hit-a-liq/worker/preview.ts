@@ -105,7 +105,7 @@ export default {
     if (r) return Response.redirect(new URL(r[0], url).toString(), r[1]);
 
     if (path.endsWith('/')) path += 'index.html';
-    let body = await file(env, path);
+    const body = await file(env, path);
     if (!body && !/\.[a-z0-9]+$/i.test(path)) {
       // Pretty URL without the trailing slash: redirect like the real site does.
       if (await file(env, `${path}/index.html`))
