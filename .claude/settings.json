@@ -1,7 +1,8 @@
 {
   "env": {
     "SCROLLCRAFT_CHROME": "/opt/pw-browsers/chromium",
-    "KIE_AI_API_KEY": "proxy-injected-placeholder"
+    "KIE_AI_API_KEY": "proxy-injected-placeholder",
+    "NODE_USE_ENV_PROXY": "1"
   },
   "hooks": {
     "SessionStart": [
