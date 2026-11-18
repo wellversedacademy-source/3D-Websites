@@ -1,7 +1,8 @@
 // Homepage: the scroll narrative.
 //
-// One garment on a fixed stage; the chapters scroll over it in normal document
-// flow (no pinning), and scroll position decides the garment's pose. The
+// One film on a fixed stage; the chapters scroll over it in normal document
+// flow (no pinning), and scroll position is the film's playhead: the hoodie
+// lights up, turns to show its back, then comes apart along its seams. The
 // signature move is the strike: a price ladder on the right edge doubles as
 // chapter navigation, the price falls as you descend, and when it crosses the
 // cobalt liquidity level the line runs across the screen and onto the garment,
@@ -10,10 +11,6 @@
 
 import '../main';
 import './home.css';
-import type { Vector3 } from 'three';
-import type { Stage, Pose } from '../three/stage';
-import { webglAvailable } from '../three/support';
-import { getProduct } from '../commerce/catalog';
 import { bindCards } from '../ui/cards';
 import { bindAccess } from '../ui/access';
 
@@ -33,80 +30,23 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches || captur
 const mobileMQ = matchMedia('(max-width: 860px), (hover: none) and (pointer: coarse)');
 const mobile = mobileMQ.matches;
 const root = document.documentElement;
-const hoodie = getProduct('signature-hoodie')!;
 
-// ------------------------------------------------------------------ poses --
-const P = (o: Partial<Pose>): Pose => ({
-  az: 0,
-  el: 0.02,
-  dist: 2.4,
-  ty: -0.04,
-  rot: 0,
-  shift: 0,
-  key: 0.8,
-  rim: 0.8,
-  explode: 0,
-  haze: 1,
-  ...o,
-});
-const DESKTOP: Record<string, Pose> = {
-  hero: P({ az: 0.22, el: 0.04, dist: 2.55, ty: -0.03, key: 0.55, rim: 0.7, shift: 0.17 }),
-  awaken: P({ az: -0.62, el: 0.14, dist: 1.75, ty: 0.05, key: 1, rim: 1, shift: 0.2 }),
-  meaning: P({
-    az: 0.35,
-    el: -0.02,
-    dist: 2.9,
-    ty: -0.05,
-    rot: Math.PI * 0.82,
-    key: 0.18,
-    rim: 1.1,
-    shift: -0.2,
-    haze: 1.4,
-  }),
-  strike: P({ az: 0, el: 0.02, dist: 1.95, ty: -0.12, rot: Math.PI, key: 0.85, rim: 0.7, shift: 0 }),
-  construct: P({
-    az: 0.62,
-    el: 0.1,
-    dist: 2.05,
-    ty: -0.12,
-    rot: Math.PI,
-    key: 1,
-    rim: 0.8,
-    explode: 1,
-    shift: 0.2,
-  }),
-  manifesto: P({
-    az: -0.18,
-    el: -0.16,
-    dist: 3.4,
-    ty: 0.02,
-    rot: 0.15,
-    key: 0.55,
-    rim: 1.2,
-    shift: -0.22,
-    haze: 1.6,
-  }),
+// ------------------------------------------------------------------- film --
+// Where each chapter lands on the film, in seconds. The film is three chained
+// 5 s clips whose joins are the four approved stills: dark front (0), lit
+// three-quarter (5), back graphic (10), pattern pieces laid out (15).
+const FILM: Record<string, number> = {
+  hero: 0,
+  awaken: 5,
+  meaning: 7.4,
+  strike: 10,
+  construct: 15,
+  manifesto: 15,
 };
-const VIEWS: Record<string, Partial<Pose>> = {
-  layers: {},
-  front: { az: 0.3, el: 0.05, dist: 2.3, ty: -0.04, rot: 0, explode: 0 },
-  back: { az: 0.25, el: 0.04, dist: 2.2, ty: -0.08, rot: Math.PI, explode: 0 },
-  detail: { az: 0.15, el: 0.04, dist: 0.62, ty: 0.115, rot: 0.42, explode: 0, key: 1.1 },
-};
-// Phones: the garment sits higher and centred, the copy below it; less travel.
-const phone = (p: Pose): Pose => ({
-  ...p,
-  shift: 0,
-  dist: Math.max(p.dist * 1.5 + 0.3, 3.3),
-  ty: p.ty - 0.2,
-});
-
-let view = 'layers';
-const poseFor = (ch: string): Pose => {
-  let p = DESKTOP[ch] ?? DESKTOP.hero;
-  if (ch === 'construct') p = { ...p, ...VIEWS[view] };
-  return mobile ? phone(p) : p;
-};
+const FILM_W = 1920;
+const FILM_H = 1080;
+// The cobalt level on the back graphic, as a fraction of frame height.
+const BACK_LEVEL = 0.476;
 
 // --------------------------------------------------------------- chapters --
 type Ch = { el: HTMLElement; name: string; anchor: number };
@@ -120,36 +60,24 @@ const measure = () => {
   });
 };
 
-const KEYS: (keyof Pose)[] = ['az', 'el', 'dist', 'ty', 'rot', 'shift', 'key', 'rim', 'explode', 'haze'];
-function mixPose(a: Pose, b: Pose, t: number): Pose {
-  const out = {} as Pose;
-  for (const k of KEYS) out[k] = a[k] + (b[k] - a[k]) * t;
-  return out;
-}
-
+const timeFor = (ch: string) => FILM[ch] ?? 0;
 const smooth = (x: number) => x * x * (3 - 2 * x);
-function targetPose(y: number): { pose: Pose; active: string; local: number } {
-  if (!chapters.length) return { pose: poseFor('hero'), active: 'hero', local: 0 };
-  if (y <= chapters[0].anchor) return { pose: poseFor(chapters[0].name), active: chapters[0].name, local: 0 };
+function target(y: number): { time: number; active: string } {
+  if (!chapters.length) return { time: 0, active: 'hero' };
+  if (y <= chapters[0].anchor) return { time: timeFor(chapters[0].name), active: chapters[0].name };
   for (let i = 0; i < chapters.length - 1; i++) {
     const a = chapters[i];
     const b = chapters[i + 1];
     if (y <= b.anchor) {
       const t = (y - a.anchor) / (b.anchor - a.anchor);
-      if (reduced) {
-        // No camera travel: cut to the nearest chapter's composition.
-        const n = t < 0.5 ? a : b;
-        return { pose: poseFor(n.name), active: n.name, local: 0 };
-      }
-      return {
-        pose: mixPose(poseFor(a.name), poseFor(b.name), smooth(t)),
-        active: t < 0.5 ? a.name : b.name,
-        local: t,
-      };
+      const n = t < 0.5 ? a : b;
+      // Reduced motion: no playback, cut to the nearest chapter's frame.
+      if (reduced) return { time: timeFor(n.name), active: n.name };
+      return { time: timeFor(a.name) + (timeFor(b.name) - timeFor(a.name)) * smooth(t), active: n.name };
     }
   }
   const last = chapters[chapters.length - 1];
-  return { pose: poseFor(last.name), active: last.name, local: 0 };
+  return { time: timeFor(last.name), active: last.name };
 }
 
 // ----------------------------------------------------------------- ladder --
@@ -185,8 +113,6 @@ function priceAt(y: number): { price: number; index: number; frac: number } {
 // ----------------------------------------------------------------- strike --
 let struck = false;
 let strikeTime = '';
-let glow = 0;
-let glowTarget = 0;
 const strikeLine = $('[data-strike-line]');
 function fireStrike() {
   if (struck) return;
@@ -204,20 +130,31 @@ function fireStrike() {
   const field = $<HTMLInputElement>('[data-strike-field]');
   if (field) field.value = strikeTime;
   root.classList.add('is-struck');
-  glow = reduced ? 0.6 : 1.6;
-  glowTarget = 0.6;
   strikeLine?.classList.add('is-on');
 }
 
-// ------------------------------------------------------------ annotations --
-const NAMED: Record<string, [number, number, number, number, number, number]> = {
-  // point xyz, outward normal xyz (garment space)
-  hood: [-0.12, 0.3, -0.02, -0.4, 0.6, -0.4],
-  shoulder: [0.31, 0.2, 0.02, 0.8, 0.5, 0.2],
-  neck: [0.03, 0.24, 0.11, 0, 0.4, 1],
-  hem: [0.16, -0.43, 0.12, 0.2, -0.3, 1],
-};
-const annotations = $$('[data-anchor]');
+// ------------------------------------------------------------------ stage --
+const video = $<HTMLVideoElement>('[data-film]')!;
+/** Where the film's frame actually sits on screen (cover on desktop, CSS box on phones). */
+function frameRect() {
+  const r = video.getBoundingClientRect();
+  const s = Math.max(r.width / FILM_W, r.height / FILM_H);
+  const h = FILM_H * s;
+  return { top: r.top + (r.height - h) / 2, height: h };
+}
+async function loadFilm(): Promise<void> {
+  const src = (mobile && video.dataset.srcMobile) || video.dataset.src!;
+  // Fetched whole so seeking never depends on HTTP range support.
+  const res = await fetch(src);
+  if (!res.ok) throw new Error(`film ${res.status}`);
+  // Typed explicitly: Safari will not decode a blob served as a generic file.
+  video.src = URL.createObjectURL(new Blob([await res.arrayBuffer()], { type: 'video/mp4' }));
+  await new Promise<void>((ok, fail) => {
+    video.addEventListener('loadeddata', () => ok(), { once: true });
+    video.addEventListener('error', () => fail(new Error('film decode failed')), { once: true });
+    video.load();
+  });
+}
 
 // ------------------------------------------------------------------ boot --
 async function boot() {
@@ -253,83 +190,50 @@ async function boot() {
   // Ladder: highlight the current level and keep the marker honest.
   const covers = $$('.covers');
 
-  const canvas = $<HTMLCanvasElement>('[data-stage-canvas]')!;
   const loader = $('[data-loader]');
-  let stage: Stage | null = null;
-  if (!webglAvailable()) {
+  let ready = false;
+  const showFrames = (err: unknown) => {
+    console.warn('Film unavailable, showing still frames instead.', err);
     root.classList.add('no-webgl');
     loader?.remove();
-  } else {
-    try {
-      const { Stage } = await import('../three/stage');
-      stage = new Stage(canvas, {
-        mobile,
-        reduced,
-        model: 'signature-hoodie',
-        palette: hoodie.colorways['Washed Black'],
-      });
-      stage
-        .load()
-        .then(() => {
-          root.classList.add('stage-ready');
-          loader?.classList.add('is-done');
-          if (capture) setTimeout(() => (document.title = 'captured'), 400);
-        })
-        .catch((err) => {
-          console.warn('3D stage unavailable, showing still frames instead.', err);
-          root.classList.add('no-webgl');
-          loader?.remove();
-          stage = null;
-        });
-    } catch (err) {
-      console.warn('WebGL failed to start, showing still frames instead.', err);
-      root.classList.add('no-webgl');
-      loader?.remove();
-      stage = null;
-    }
-  }
+  };
+  const film = loadFilm()
+    .then(() => {
+      ready = true;
+      // The poster stays up until a real frame has painted (iOS keeps a
+      // seeked-but-never-played video blank).
+      video.addEventListener('seeked', () => root.classList.add('stage-ready'), { once: true });
+      video.currentTime = 0.001;
+      loader?.classList.add('is-done');
+    })
+    .catch(showFrames);
 
-  // Deconstruction controls.
-  $$<HTMLButtonElement>('[data-view]').forEach((b) =>
-    b.addEventListener('click', () => {
-      view = b.dataset.view!;
-      $$('button[data-view]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-    }),
-  );
-  const note = $('[data-colorway-note]');
-  $$<HTMLButtonElement>('[data-colorway]').forEach((b) =>
-    b.addEventListener('click', () => {
-      const name = b.dataset.colorway!;
-      const cw = hoodie.colorways[name];
-      $$('[data-colorway]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-      stage?.setPalette(cw);
-      if (note) note.textContent = `${name}. ${cw.note}.`;
-    }),
-  );
-
-  // Poster capture: freeze on one chapter's composition.
+  // Poster capture: freeze on one chapter's frame.
   if (capture) {
     root.classList.add('is-capture');
-    const [ch, v] = capture.split(':');
-    if (v) view = v;
+    const ch = capture.split(':')[0];
     if (ch === 'strike') fireStrike();
-    stage?.setPose({ ...poseFor(ch), shift: 0 });
-    stage?.setGlow(ch === 'strike' ? 0.9 : 0);
-    stage?.start();
+    await film;
+    video.addEventListener(
+      'seeked',
+      () => {
+        root.classList.add('stage-ready');
+        setTimeout(() => (document.title = 'captured'), 300);
+      },
+      { once: true },
+    );
+    video.currentTime = Math.min(timeFor(ch), video.duration - 0.05);
     return;
   }
 
-  let current: Pose | null = null;
+  let playhead = 0;
   let lastActive = '';
-  const THREE = stage ? await import('three') : null;
-  const tmp: Vector3 | null = THREE ? new THREE.Vector3() : null;
-  const tmpN: Vector3 | null = THREE ? new THREE.Vector3() : null;
   const frame = () => {
     requestAnimationFrame(frame);
     const y = scrollY;
-    const { pose, active } = targetPose(y);
-    // Ease toward the scroll target so wheel steps and clicks never jump.
-    current = current && !reduced ? mixPose(current, pose, 0.11) : pose;
+    const { time, active } = target(y);
+    // Ease toward the scroll target so wheel steps never stutter the film.
+    playhead = reduced ? time : playhead + (time - playhead) * 0.18;
 
     // Price ladder and the strike.
     const { price, index } = priceAt(y);
@@ -345,7 +249,6 @@ async function boot() {
     if (!struck && price <= LEVEL + 0.001 && ladderStops.length) fireStrike();
     root.classList.toggle('below-level', price <= LEVEL);
 
-    glow += (glowTarget - glow) * (reduced ? 1 : 0.035);
     if (active !== lastActive) {
       root.dataset.chapter = active;
       lastActive = active;
@@ -357,51 +260,18 @@ async function boot() {
       return r.top <= 0 && r.bottom >= innerHeight;
     });
     root.classList.toggle('stage-covered', covered);
-    if (!stage) return;
-    stage.setVisible(!covered);
-    if (covered) return;
-    stage.setPose(current);
-    stage.setGlow(glow);
+    if (!ready || covered) return;
+    const t = Math.min(playhead, video.duration - 0.05);
+    // Coalesce seeks: never queue one while the decoder is still resolving the last.
+    if (!video.seeking && Math.abs(video.currentTime - t) > (mobile ? 0.02 : 0.008)) video.currentTime = t;
 
-    // During the strike the full-width line continues the garment's own level.
-    const levelLayer = stage.garment?.layers.find((l) => l.id === 'level');
-    if (levelLayer && tmp && active === 'strike') {
-      stage.garment!.root.updateMatrixWorld();
-      tmp.copy(levelLayer.anchor);
-      tmp.x = 0;
-      const p = stage.project(tmp);
-      root.style.setProperty('--level-y', `${p.y.toFixed(0)}px`);
-    }
-
-    // Annotations follow their points on the garment (desktop only).
-    if (mobile || !tmp || !tmpN) return;
-    const g = stage.garment;
-    for (const el of annotations) {
-      const show = el.dataset.chShow === active && (active !== 'construct' || view === 'layers');
-      let visible = false;
-      if (show && g) {
-        const key = el.dataset.anchor!;
-        if (key.startsWith('layer:')) {
-          const layer = g.layers.find((l) => l.id === key.slice(6));
-          if (layer) {
-            tmp.copy(layer.anchor).addScaledVector(layer.dir, layer.lift * current.explode);
-            tmpN.copy(layer.dir);
-          }
-        } else {
-          const n = NAMED[key];
-          tmp.set(n[0], n[1], n[2]);
-          tmpN.set(n[3], n[4], n[5]).normalize();
-        }
-        stage.garment?.root.updateMatrixWorld();
-        const p = stage.project(tmp);
-        visible = !p.behind && stage.facing(tmp, tmpN);
-        el.style.transform = `translate3d(${p.x.toFixed(1)}px, ${p.y.toFixed(1)}px, 0)`;
-      }
-      el.classList.toggle('is-on', visible);
+    // During the strike the full-width line continues the level on the back graphic.
+    if (active === 'strike') {
+      const f = frameRect();
+      root.style.setProperty('--level-y', `${(f.top + f.height * BACK_LEVEL).toFixed(0)}px`);
     }
   };
   requestAnimationFrame(frame);
-  stage?.start();
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

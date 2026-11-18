@@ -6,15 +6,55 @@
   z-index: 1;
   pointer-events: none;
 }
-.stage canvas {
+.stage__frame,
+.stage__frame img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: block;
-  opacity: 0;
-  transition: opacity 900ms var(--ease);
+  object-fit: cover;
 }
-.stage-ready .stage canvas {
+/* The film fades up over its own first frame once a real frame has painted. */
+.stage video {
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+.stage-ready .stage video {
   opacity: 1;
+}
+/* The laid-out pieces fill the frame; dim them under the copy that reads over them. */
+.stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  background: color-mix(in oklab, var(--canvas) 62%, transparent);
+  transition: opacity 700ms var(--ease);
+  pointer-events: none;
+}
+[data-chapter='construct'] .stage::before {
+  background: linear-gradient(
+    to right,
+    color-mix(in oklab, var(--canvas) 94%, transparent) 0%,
+    color-mix(in oklab, var(--canvas) 80%, transparent) 30%,
+    transparent 52%
+  );
+}
+[data-chapter='manifesto'] .stage::after {
+  opacity: 1;
+}
+/* Copy sits left of the garment on wide screens; keep it legible over the film. */
+.stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(to right, color-mix(in oklab, var(--canvas) 72%, transparent) 0%, transparent 42%),
+    linear-gradient(to left, color-mix(in oklab, var(--canvas) 55%, transparent) 0%, transparent 30%);
+  pointer-events: none;
 }
 .stage-covered .stage {
   visibility: hidden;
@@ -311,49 +351,6 @@ main {
   color: var(--ink-soft);
   font-size: 0.82rem;
 }
-.controls {
-  display: grid;
-  gap: var(--sc-4);
-  margin-top: var(--sc-4);
-}
-.controls__group {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--sc-2);
-}
-.controls__group .label {
-  width: 100%;
-}
-.controls button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--sc-2);
-  min-height: 2.75rem;
-  padding: 0 var(--sc-4);
-  background: color-mix(in oklab, var(--canvas) 55%, transparent);
-  border: 1px solid var(--hair-strong);
-  color: var(--ink-soft);
-  font: 500 0.72rem/1 var(--text);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-radius: var(--radius);
-  transition:
-    color 140ms var(--ease),
-    border-color 140ms var(--ease);
-}
-.controls button[aria-pressed='true'] {
-  color: var(--ink);
-  border-color: var(--ink);
-}
-.controls button i {
-  width: 0.8rem;
-  height: 0.8rem;
-  background: var(--sw);
-  border: 1px solid var(--hair-strong);
-}
-
 /* Featured drop: opaque, conventional, easy to shop. */
 .covers {
   background: var(--canvas);
@@ -582,48 +579,6 @@ main {
   text-underline-offset: 0.2em;
 }
 
-/* ---------------------------------------------------------- annotations -- */
-.annotations {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-.annotations p {
-  position: absolute;
-  left: 0;
-  top: 0;
-  margin: 0;
-  opacity: 0;
-  transition: opacity 260ms var(--ease);
-}
-.annotations p.is-on {
-  opacity: 1;
-}
-.annotations p::before {
-  content: '';
-  position: absolute;
-  left: -3px;
-  top: -3px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--ink);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--ink) 18%, transparent);
-}
-.annotations span {
-  position: absolute;
-  left: 18px;
-  top: -0.7rem;
-  white-space: nowrap;
-  padding: 0.3rem 0.6rem;
-  font: 500 0.68rem/1 var(--text);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: color-mix(in oklab, var(--canvas) 80%, transparent);
-  border-left: 1px solid var(--ink);
-}
-
 /* ---------------------------------------------------------------- ladder -- */
 .ladder {
   position: fixed;
@@ -713,7 +668,6 @@ main {
 
 /* --------------------------------------------------- no WebGL / capture -- */
 .no-webgl .stage,
-.no-webgl .annotations,
 .no-webgl .loader {
   display: none;
 }
@@ -742,14 +696,10 @@ main {
   position: static;
   height: auto;
 }
-.no-webgl .controls__group:first-of-type {
-  display: none;
-}
 .is-capture .bar,
 .is-capture main,
 .is-capture .ladder,
 .is-capture .foot,
-.is-capture .annotations,
 .is-capture .sc-grain,
 .is-capture [data-sc-progress],
 .is-capture .strike-line {
@@ -781,15 +731,23 @@ main {
   .stage-covered .ladder {
     display: none;
   }
-  .annotations {
-    display: none;
-  }
   /* The garment sits in the upper half; copy holds the lower half on a band
      of density that belongs to the stage, not to the text. */
+  .stage__frame {
+    inset: 10svh auto auto 50%;
+    width: 125vw;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    translate: -50% 0;
+  }
+  .stage::before {
+    display: none;
+  }
   .stage::after {
     content: '';
     position: absolute;
     inset: auto 0 0 0;
+    opacity: 1;
     height: 62%;
     background: linear-gradient(
       to top,
@@ -871,7 +829,7 @@ main {
   .close__mark .mark-level {
     transition: none;
   }
-  .stage canvas {
+  .stage video {
     transition: none;
   }
 }

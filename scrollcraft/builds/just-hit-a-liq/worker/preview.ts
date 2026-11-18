@@ -31,6 +31,7 @@ const TYPES: Record<string, string> = {
   png: 'image/png',
   jpg: 'image/jpeg',
   webp: 'image/webp',
+  mp4: 'video/mp4',
   avif: 'image/avif',
   ico: 'image/vnd.microsoft.icon',
   woff: 'font/woff',
@@ -44,7 +45,7 @@ const SECURITY: Record<string, string> = {
   'permissions-policy': 'camera=(), microphone=(), geolocation=()',
   'x-frame-options': 'DENY',
   'content-security-policy':
-    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' blob: data:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' blob: data:; media-src 'self' blob:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
   // A preview must never be indexed.
   'x-robots-tag': 'noindex, nofollow',
 };

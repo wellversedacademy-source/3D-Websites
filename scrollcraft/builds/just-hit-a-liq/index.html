@@ -4,22 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <!--@head {"title":"Just hit a LiQ | Designer apparel from the trading floor","description":"Just hit a LiQ is designer apparel built on the language of liquidity. Drop 001: heavyweight garments in black, graphite and bone, marked by one cobalt line.","path":"/"}-->
-    <link
-      rel="preload"
-      href="/models/signature-hoodie.glb"
-      as="fetch"
-      type="model/gltf-binary"
-      crossorigin
-      media="(min-width: 861px)"
-    />
-    <link
-      rel="preload"
-      href="/models/signature-hoodie-m.glb"
-      as="fetch"
-      type="model/gltf-binary"
-      crossorigin
-      media="(max-width: 860px)"
-    />
+    <link rel="preload" href="/film/hoodie-poster.webp" as="image" media="(min-width: 861px)" />
+    <link rel="preload" href="/film/hoodie-poster-m.webp" as="image" media="(max-width: 860px)" />
     <script src="/engine/scrollcraft.js" defer></script>
   </head>
   <body class="page page--home">
@@ -27,18 +13,22 @@
     <div class="sc-grain" aria-hidden="true"></div>
     <!--@header-->
 
-    <!-- The fixed 3D stage. Decorative: every fact it shows is also in the copy. -->
+    <!-- The fixed film stage: scroll position is the playhead. Decorative:
+         every fact it shows is also in the copy. -->
     <div class="stage" data-stage aria-hidden="true">
-      <canvas data-stage-canvas></canvas>
-    </div>
-    <div class="annotations" data-annotations aria-hidden="true">
-      <p data-anchor="hood" data-ch-show="awaken"><span>Double-layer hood</span></p>
-      <p data-anchor="shoulder" data-ch-show="awaken"><span>Structured dropped shoulder</span></p>
-      <p data-anchor="neck" data-ch-show="awaken"><span>No drawcords. A cleaner line.</span></p>
-      <p data-anchor="hem" data-ch-show="awaken"><span>500 GSM heavyweight fleece</span></p>
-      <p data-anchor="layer:micro" data-ch-show="construct"><span>Bone microtype</span></p>
-      <p data-anchor="layer:level" data-ch-show="construct"><span>Cobalt silicone level</span></p>
-      <p data-anchor="layer:print" data-ch-show="construct"><span>Tonal graphite print</span></p>
+      <picture class="stage__frame">
+        <source srcset="/film/hoodie-poster-m.webp" media="(max-width: 860px)" />
+        <img src="/film/hoodie-poster.webp" alt="" data-film-poster />
+      </picture>
+      <video
+        class="stage__frame"
+        data-film
+        data-src="/film/hoodie.mp4"
+        data-src-mobile="/film/hoodie-m.mp4"
+        muted
+        playsinline
+        preload="none"
+      ></video>
     </div>
     <div class="strike-line" data-strike-line aria-hidden="true"></div>
     <div class="loader" data-loader aria-hidden="true">
@@ -257,30 +247,6 @@
               </dd>
             </div>
           </dl>
-          <div class="controls">
-            <div class="controls__group" role="group" aria-label="Garment view">
-              <span class="label">View</span>
-              <button type="button" data-view="layers" aria-pressed="true">Layers</button>
-              <button type="button" data-view="front" aria-pressed="false">Front</button>
-              <button type="button" data-view="back" aria-pressed="false">Back</button>
-              <button type="button" data-view="detail" aria-pressed="false">Detail</button>
-            </div>
-            <div class="controls__group" role="group" aria-label="Colorway">
-              <span class="label">Colorway</span>
-              <button type="button" data-colorway="Washed Black" aria-pressed="true">
-                <i style="--sw: #1b1b1e" aria-hidden="true"></i>Washed Black
-              </button>
-              <button type="button" data-colorway="Bone" aria-pressed="false">
-                <i style="--sw: #d9d2c3" aria-hidden="true"></i>Bone
-              </button>
-              <button type="button" data-colorway="Espresso" aria-pressed="false">
-                <i style="--sw: #2e221c" aria-hidden="true"></i>Espresso
-              </button>
-            </div>
-            <p class="fine" data-colorway-note>
-              Washed Black is the launch colorway. Bone and Espresso are proposed editions.
-            </p>
-          </div>
         </div>
       </section>
 

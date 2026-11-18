@@ -56,7 +56,7 @@ const browser = await chromium.launch({
 });
 for (const j of jobs.filter((x) => !process.env.ONLY || x.url.includes(process.env.ONLY))) {
   const page = await browser.newPage({ viewport: { width: j.w, height: j.h }, deviceScaleFactor: 1 });
-  await page.goto(BASE + j.url, { waitUntil: 'networkidle', timeout: 120000 });
+  await page.goto(BASE + j.url, { waitUntil: 'load', timeout: 120000 });
   await page.waitForFunction(() => document.title === 'captured', null, { timeout: 120000 });
   await page.waitForTimeout(600);
   const png = path.join(RAW, j.out.replace('/', '__') + '.png');
