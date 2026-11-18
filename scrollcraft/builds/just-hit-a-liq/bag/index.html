@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!--@head {"title":"Bag","description":"Your Just hit a LiQ bag.","path":"/bag/","noindex":true}-->
+  </head>
+  <body class="page page--bag">
+    <!--@header-->
+    <main id="main" class="inner wrap">
+      <p class="label">Bag</p>
+      <h1 class="inner__title">Your selection.</h1>
+      <div class="bagpage">
+        <section aria-label="Items in your bag" data-bag-page></section>
+        <aside class="bagpage__aside" aria-labelledby="summary-h">
+          <h2 id="summary-h" class="label">Summary</h2>
+          <p data-bag-summary></p>
+          <p class="fine">Prices are confirmed at release. No payment is taken on this site yet.</p>
+          <button class="btn btn--solid" type="button" data-checkout disabled>Checkout</button>
+          <p class="fine" data-checkout-reason></p>
+          <a class="btn btn--line" href="/#access">Request release access</a>
+        </aside>
+      </div>
+    </main>
+    <!--@footer-->
+    <script type="module" src="/src/pages/bag.ts"></script>
+  </body>
+</html>

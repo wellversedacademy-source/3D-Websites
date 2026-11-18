@@ -1,0 +1,890 @@
+/* Homepage: chapters over a fixed garment stage. */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.stage canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0;
+  transition: opacity 900ms var(--ease);
+}
+.stage-ready .stage canvas {
+  opacity: 1;
+}
+.stage-covered .stage {
+  visibility: hidden;
+}
+main {
+  position: relative;
+  z-index: 2;
+}
+.foot {
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------- loader -- */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transition: opacity 700ms var(--ease);
+}
+.loader.is-done {
+  opacity: 0;
+}
+.loader__mark {
+  width: 3.4rem;
+  fill: none;
+}
+.loader__mark rect {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: level 1.4s var(--ease) infinite;
+}
+@keyframes level {
+  0% {
+    transform: scaleX(0);
+  }
+  60%,
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+/* ------------------------------------------------------------- chapters -- */
+.ch {
+  position: relative;
+  display: grid;
+  align-items: center;
+  padding-inline: var(--sc-gutter);
+}
+.ch__poster {
+  display: none;
+  margin: 0;
+}
+.ch__copy {
+  max-width: 30rem;
+  display: grid;
+  gap: var(--sc-4);
+}
+.ch__copy--trail {
+  justify-self: end;
+}
+.ch__h {
+  font-size: clamp(2.3rem, 1.5rem + 2.9vw, 4.4rem);
+  line-height: 1.02;
+}
+.ch__p {
+  color: var(--ink-soft);
+  max-width: 46ch;
+  margin: 0;
+}
+.facts {
+  list-style: none;
+  margin: var(--sc-3) 0 0;
+  padding: var(--sc-4) 0 0;
+  border-top: 1px solid var(--hair);
+  display: grid;
+  gap: var(--sc-2);
+  font-size: 0.82rem;
+}
+.facts li::before {
+  content: '';
+  display: inline-block;
+  width: 0.7rem;
+  height: 1px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-right: 0.7rem;
+}
+
+/* Opening frame */
+.ch--open {
+  min-height: 100svh;
+  align-items: end;
+  padding-bottom: clamp(3rem, 11vh, 8rem);
+}
+.open__copy {
+  max-width: 34rem;
+  display: grid;
+  gap: var(--sc-5);
+}
+.open__title {
+  margin: 0;
+  display: grid;
+  gap: var(--sc-3);
+  font-weight: 400;
+}
+.open__kicker {
+  font: 500 0.95rem/1 var(--display);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.open__title .mark {
+  width: min(30rem, 78vw);
+  color: var(--ink);
+}
+.mark .mark-level {
+  transform-origin: 0 50%;
+}
+.open__line {
+  font: 400 clamp(1.25rem, 1rem + 0.9vw, 1.75rem) / 1.25 var(--display);
+  margin: 0;
+  max-width: 24ch;
+  text-wrap: balance;
+}
+.open__actions {
+  display: flex;
+  gap: var(--sc-3);
+  flex-wrap: wrap;
+  margin: 0;
+}
+/* The user asked for a clear prompt to scroll. Here it is a wick falling
+   toward a level: the brand's own gesture, not an arrow. */
+.cue {
+  position: absolute;
+  right: var(--sc-gutter);
+  bottom: clamp(3rem, 11vh, 8rem);
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  width: 9rem;
+}
+.cue__wick {
+  width: 2px;
+  height: 3.2rem;
+  background: var(--ink);
+  transform-origin: 50% 0;
+  animation: cue 2.6s var(--ease) infinite;
+}
+.cue__level {
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+}
+.cue__text {
+  margin-top: var(--sc-3);
+  font: 500 0.66rem/1.2 var(--text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+}
+@keyframes cue {
+  0% {
+    transform: scaleY(0.15);
+    opacity: 0.4;
+  }
+  55% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+.ch--light {
+  min-height: 150svh;
+}
+.ch--meaning {
+  min-height: 170svh;
+}
+.meaning {
+  max-width: 36rem;
+  gap: var(--sc-5);
+}
+.meaning__line {
+  font: 400 clamp(1.9rem, 1.2rem + 2.4vw, 3.4rem) / 1.08 var(--display);
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.meaning__line--last {
+  font-style: italic;
+}
+.meaning__note {
+  margin-top: var(--sc-4);
+}
+
+/* The strike: the peak. Largest span on the page; its copy holds. */
+.ch--strike {
+  min-height: 260svh;
+  align-items: start;
+}
+.strike {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  padding-block: calc(var(--bar-h) + var(--sc-5)) clamp(2.5rem, 9vh, 6rem);
+}
+.strike__stamp {
+  justify-self: center;
+  margin: 0;
+  display: flex;
+  gap: var(--sc-4);
+  font: 500 0.78rem/1 var(--text);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+  transition:
+    opacity 400ms var(--ease),
+    color 400ms var(--ease);
+}
+.is-struck .strike__stamp {
+  opacity: 1;
+  color: var(--ink);
+}
+.strike__stamp span:first-child {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.35rem;
+}
+.strike__h {
+  grid-row: 3;
+  font-size: clamp(2.8rem, 1.6rem + 4.4vw, 6rem);
+  max-width: 9ch;
+}
+.strike__p {
+  grid-row: 4;
+  margin-top: var(--sc-4);
+}
+
+/* The level, across the whole viewport, once it has been taken. */
+.strike-line {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--level-y, 50%);
+  height: 2px;
+  z-index: 2;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    transform 1100ms var(--ease),
+    opacity 600ms var(--ease);
+}
+.strike-line.is-on {
+  transform: scaleX(1);
+}
+[data-chapter='strike'] .strike-line.is-on {
+  opacity: 0.9;
+}
+
+.ch--construct {
+  min-height: 190svh;
+}
+.construct {
+  max-width: 32rem;
+}
+.layers {
+  margin: var(--sc-3) 0 0;
+  display: grid;
+  gap: var(--sc-4);
+}
+.layers > div {
+  border-top: 1px solid var(--hair);
+  padding-top: var(--sc-3);
+}
+.layers dt {
+  font: 400 1.25rem/1.1 var(--display);
+  margin-bottom: var(--sc-1);
+}
+.layers dd {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+}
+.controls {
+  display: grid;
+  gap: var(--sc-4);
+  margin-top: var(--sc-4);
+}
+.controls__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sc-2);
+}
+.controls__group .label {
+  width: 100%;
+}
+.controls button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-2);
+  min-height: 2.75rem;
+  padding: 0 var(--sc-4);
+  background: color-mix(in oklab, var(--canvas) 55%, transparent);
+  border: 1px solid var(--hair-strong);
+  color: var(--ink-soft);
+  font: 500 0.72rem/1 var(--text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition:
+    color 140ms var(--ease),
+    border-color 140ms var(--ease);
+}
+.controls button[aria-pressed='true'] {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.controls button i {
+  width: 0.8rem;
+  height: 0.8rem;
+  background: var(--sw);
+  border: 1px solid var(--hair-strong);
+}
+
+/* Featured drop: opaque, conventional, easy to shop. */
+.covers {
+  background: var(--canvas);
+}
+.ch--drop {
+  display: block;
+  padding-block: var(--sc-section);
+  padding-inline: 0;
+  border-top: 1px solid var(--hair);
+}
+.drop__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: var(--sc-7);
+  align-items: end;
+  margin-bottom: var(--sc-8);
+}
+.drop__h {
+  font-size: clamp(2.3rem, 1.5rem + 3vw, 4.6rem);
+}
+.drop__h em {
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.drop__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: var(--sc-8) var(--sc-6);
+}
+.drop__grid > :first-child {
+  grid-row: span 2;
+}
+.drop__more {
+  margin: var(--sc-8) 0 0;
+}
+.select {
+  min-height: 2.9rem;
+  padding: 0 var(--sc-4);
+  background: var(--canvas);
+  border: 1px solid var(--hair-strong);
+  color: var(--ink);
+  border-radius: var(--radius);
+}
+.card__msg {
+  width: 100%;
+  min-height: 1.2em;
+}
+
+.ch--manifesto {
+  min-height: 180svh;
+}
+.manifesto {
+  justify-self: end;
+  max-width: 34rem;
+  display: grid;
+  gap: var(--sc-6);
+}
+.manifesto p {
+  font: 400 clamp(1.8rem, 1.2rem + 2.2vw, 3.2rem) / 1.12 var(--display);
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+}
+.manifesto__end {
+  font-style: italic;
+  padding-top: var(--sc-5);
+  border-top: 2px solid var(--accent);
+}
+
+/* Access: the woven edition label. */
+.ch--access {
+  display: block;
+  padding-block: var(--sc-section);
+  padding-inline: 0;
+  border-top: 1px solid var(--hair);
+}
+.access {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--sc-8);
+  align-items: start;
+}
+.access__h {
+  font-size: clamp(2.3rem, 1.5rem + 3vw, 4.6rem);
+  margin-bottom: var(--sc-5);
+}
+.tag {
+  border: 1px solid var(--hair-strong);
+  background: var(--surface);
+  padding: var(--sc-6);
+  display: grid;
+  gap: var(--sc-4);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, var(--ink) 8%, transparent) inset,
+    0 24px 48px -24px hsl(240 20% 2% / 0.8);
+}
+.tag__label {
+  display: grid;
+  gap: var(--sc-1);
+  padding-bottom: var(--sc-4);
+  border-bottom: 1px dashed var(--hair-strong);
+  font: 500 0.74rem/1.4 var(--text);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.tag__strike {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.is-struck .tag__strike {
+  color: var(--ink);
+}
+.field {
+  display: grid;
+  gap: var(--sc-2);
+}
+.field label,
+.interests legend {
+  font: 500 0.72rem/1.3 var(--text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.opt-note {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.field input {
+  min-height: 3rem;
+  padding: 0 var(--sc-4);
+  background: var(--canvas);
+  border: 1px solid var(--hair-strong);
+  color: var(--ink);
+  border-radius: var(--radius);
+}
+.field input::placeholder {
+  color: color-mix(in oklab, var(--ink-soft) 70%, transparent);
+}
+.field input[aria-invalid='true'] {
+  border-color: #f0b4a8;
+}
+.field__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+.field__err {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #f0b4a8;
+  min-height: 0;
+}
+.field__err:empty {
+  display: none;
+}
+.interests {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--sc-1);
+}
+.interests legend {
+  margin-bottom: var(--sc-2);
+}
+.check {
+  display: flex;
+  gap: var(--sc-3);
+  align-items: flex-start;
+  font-size: 0.82rem;
+  min-height: 2.25rem;
+  cursor: pointer;
+}
+.check input {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0.15rem 0 0;
+  flex: none;
+}
+.hp {
+  position: absolute;
+  left: -9999px;
+}
+.tag__result {
+  margin: 0;
+  min-height: 1.4em;
+  font-size: 0.85rem;
+}
+
+/* Closing frame: the mark, resolved, the level drawn across the page. */
+.ch--close {
+  display: block;
+  padding-block: var(--sc-9) var(--sc-8);
+  padding-inline: 0;
+  border-top: 1px solid var(--hair);
+}
+.close {
+  display: grid;
+  gap: var(--sc-7);
+}
+.close__mark .mark {
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+}
+.close__mark .mark-level {
+  transform: scaleX(0);
+  transition: transform 1600ms var(--ease) 200ms;
+}
+.close__mark.is-drawn .mark-level {
+  transform: scaleX(1);
+}
+.close__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-3) var(--sc-7);
+}
+.close__nav a {
+  font: 400 clamp(1.4rem, 1.1rem + 1vw, 2rem) / 1.2 var(--display);
+  text-decoration: none;
+  padding-block: var(--sc-1);
+}
+.close__nav a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* ---------------------------------------------------------- annotations -- */
+.annotations {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.annotations p {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  opacity: 0;
+  transition: opacity 260ms var(--ease);
+}
+.annotations p.is-on {
+  opacity: 1;
+}
+.annotations p::before {
+  content: '';
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--ink) 18%, transparent);
+}
+.annotations span {
+  position: absolute;
+  left: 18px;
+  top: -0.7rem;
+  white-space: nowrap;
+  padding: 0.3rem 0.6rem;
+  font: 500 0.68rem/1 var(--text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: color-mix(in oklab, var(--canvas) 80%, transparent);
+  border-left: 1px solid var(--ink);
+}
+
+/* ---------------------------------------------------------------- ladder -- */
+.ladder {
+  position: fixed;
+  right: var(--sc-4);
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 50;
+}
+.ladder ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.15rem;
+}
+.ladder a {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: end;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2rem;
+  padding: 0.2rem 0.4rem;
+  text-decoration: none;
+  font: 400 0.66rem/1 var(--text);
+  letter-spacing: 0.06em;
+  color: color-mix(in oklab, var(--ink-soft) 85%, transparent);
+  font-variant-numeric: tabular-nums;
+  transition: color 160ms var(--ease);
+}
+.ladder__name {
+  order: -1;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  opacity: 0;
+  transform: translateX(6px);
+  transition:
+    opacity 200ms var(--ease),
+    transform 200ms var(--ease);
+}
+.ladder:hover .ladder__name,
+.ladder:focus-within .ladder__name,
+.ladder a[data-current] .ladder__name {
+  opacity: 1;
+  transform: none;
+}
+.ladder a[data-current],
+.ladder a:hover,
+.ladder a:focus-visible {
+  color: var(--ink);
+}
+.ladder__liq a {
+  color: var(--ink);
+}
+.ladder__liq .ladder__px {
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 0.15rem;
+}
+.ladder__marker {
+  position: fixed;
+  right: calc(100% + 0.4rem);
+  top: 0;
+  margin: 0;
+  translate: 0 -50%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 500 0.66rem/1 var(--text);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.ladder__marker::after {
+  content: '';
+  width: 1.4rem;
+  height: 1px;
+  background: var(--ink);
+}
+.below-level .ladder__marker span {
+  color: var(--ink);
+  box-shadow: 0 2px 0 var(--accent);
+}
+.stage-covered .ladder__marker {
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------- no WebGL / capture -- */
+.no-webgl .stage,
+.no-webgl .annotations,
+.no-webgl .loader {
+  display: none;
+}
+.no-webgl .ch__poster {
+  display: block;
+  grid-column: 1 / -1;
+  margin-block: calc(var(--bar-h) + var(--sc-4)) var(--sc-5);
+}
+.no-webgl .ch__poster img {
+  width: 100%;
+  height: auto;
+  max-height: 70svh;
+  object-fit: contain;
+}
+.no-webgl .ch--light,
+.no-webgl .ch--meaning,
+.no-webgl .ch--construct,
+.no-webgl .ch--manifesto {
+  min-height: auto;
+  padding-block: var(--sc-8);
+}
+.no-webgl .ch--strike {
+  min-height: auto;
+}
+.no-webgl .strike {
+  position: static;
+  height: auto;
+}
+.no-webgl .controls__group:first-of-type {
+  display: none;
+}
+.is-capture .bar,
+.is-capture main,
+.is-capture .ladder,
+.is-capture .foot,
+.is-capture .annotations,
+.is-capture .sc-grain,
+.is-capture [data-sc-progress],
+.is-capture .strike-line {
+  visibility: hidden;
+}
+
+/* ---------------------------------------------------------------- phone -- */
+@media (max-width: 860px) {
+  .ladder ol {
+    display: none;
+  }
+  .ladder {
+    top: auto;
+    bottom: var(--sc-4);
+    translate: none;
+    right: var(--sc-4);
+  }
+  .ladder__marker {
+    position: static;
+    translate: none;
+    transform: none !important;
+    padding: 0.45rem 0.6rem;
+    background: color-mix(in oklab, var(--canvas) 80%, transparent);
+    border: 1px solid var(--hair);
+  }
+  .ladder__marker::after {
+    display: none;
+  }
+  .stage-covered .ladder {
+    display: none;
+  }
+  .annotations {
+    display: none;
+  }
+  /* The garment sits in the upper half; copy holds the lower half on a band
+     of density that belongs to the stage, not to the text. */
+  .stage::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 62%;
+    background: linear-gradient(
+      to top,
+      color-mix(in oklab, var(--canvas) 96%, transparent) 0%,
+      color-mix(in oklab, var(--canvas) 80%, transparent) 45%,
+      transparent 100%
+    );
+  }
+  .ch {
+    align-items: end;
+    padding-bottom: 12svh;
+  }
+  .ch__copy,
+  .ch__copy--trail,
+  .manifesto {
+    justify-self: stretch;
+    max-width: none;
+  }
+  .ch--open {
+    padding-bottom: 9svh;
+  }
+  .open__title .mark {
+    width: min(19rem, 72vw);
+  }
+  .cue {
+    display: none;
+  }
+  .ch__h {
+    font-size: var(--sc-t-2xl);
+  }
+  .ch--strike {
+    min-height: 200svh;
+    align-items: start;
+    padding-bottom: 0;
+  }
+  .strike {
+    padding-bottom: 14svh;
+  }
+  .strike__h {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+  }
+  .strike__stamp {
+    font-size: 0.66rem;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sc-2);
+  }
+  .ch--light {
+    min-height: 120svh;
+  }
+  .ch--meaning,
+  .ch--construct,
+  .ch--manifesto {
+    min-height: 140svh;
+  }
+  .drop__head,
+  .drop__grid,
+  .access {
+    grid-template-columns: 1fr;
+  }
+  .drop__grid > :first-child {
+    grid-row: auto;
+  }
+  .tag {
+    padding: var(--sc-5);
+  }
+  .no-webgl .stage::after {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------- reduced motion -- */
+@media (prefers-reduced-motion: reduce) {
+  .cue__wick,
+  .loader__mark rect {
+    animation: none;
+  }
+  .strike-line,
+  .close__mark .mark-level {
+    transition: none;
+  }
+  .stage canvas {
+    transition: none;
+  }
+}
+
+/* Reserve the ladder's column on wide screens so nothing sits under it. */
+@media (min-width: 861px) {
+  .page--home .ch {
+    padding-right: max(var(--sc-gutter), 9rem);
+  }
+  .page--home .covers .wrap {
+    padding-right: max(var(--sc-gutter), 9rem);
+  }
+  .cue {
+    right: max(var(--sc-gutter), 9rem);
+  }
+}

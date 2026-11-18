@@ -1,0 +1,34 @@
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar" data-bar>
+  <a class="bar__brand" href="/" aria-label="Just hit a LiQ, home">
+    <span class="bar__kicker" aria-hidden="true">Just hit a</span>
+    <!--@mark-plain-->
+  </a>
+  <nav class="bar__nav" aria-label="Primary" id="primary-nav">
+    <ul>
+      <li><a href="/shop/">Drop 001</a></li>
+      <li><a href="/#meaning">The mark</a></li>
+      <li><a href="/#access">Release access</a></li>
+      <li><a href="/care/">Care</a></li>
+    </ul>
+  </nav>
+  <div class="bar__end">
+    <a class="bar__bag" href="/bag/" data-bag-open aria-label="Bag, 0 items"
+      ><span>Bag</span> <span class="bar__count" data-bag-count>0</span></a
+    >
+    <button class="bar__menu" type="button" aria-expanded="false" aria-controls="primary-nav" data-menu>
+      Menu
+    </button>
+  </div>
+</header>
+<dialog class="drawer" data-bag-drawer aria-labelledby="drawer-title">
+  <div class="drawer__head">
+    <h2 id="drawer-title" class="drawer__title">Bag</h2>
+    <button type="button" class="drawer__close" data-bag-close>Close</button>
+  </div>
+  <div class="drawer__body" data-bag-lines></div>
+  <div class="drawer__foot">
+    <p class="fine" data-checkout-note></p>
+    <a class="btn btn--line" href="/bag/">View bag</a>
+  </div>
+</dialog>

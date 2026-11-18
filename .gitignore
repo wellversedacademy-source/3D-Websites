@@ -26,3 +26,6 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# The site build keeps its lockfile so installs are reproducible.
+!scrollcraft/builds/just-hit-a-liq/package-lock.json
