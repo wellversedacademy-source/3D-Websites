@@ -1,0 +1,38 @@
+{
+  "name": "just-hit-a-liq",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "The official website for Just hit a LiQ. Scroll-driven 3D storefront, deployed on Cloudflare Workers static assets.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4173",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "check": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build",
+    "posters": "node scripts/render-posters.mjs",
+    "worker:dev": "wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@fontsource/bodoni-moda": "5.2.7",
+    "@fontsource/ibm-plex-mono": "5.2.7",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "@types/three": "0.186.0",
+    "eslint": "9.39.1",
+    "playwright-core": "1.63.0",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.5",
+    "vitest": "4.1.12",
+    "wrangler": "4.45.0"
+  }
+}

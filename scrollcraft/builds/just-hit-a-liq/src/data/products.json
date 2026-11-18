@@ -1,0 +1,117 @@
+{
+  "_readme": "Drop 001 product data. Shaped like a Shopify Storefront API product (handle, options, variants, selectedOptions, availableForSale) so the local data can be swapped for live data without changing the UI. Prices are null on purpose: the brand plan lists planning ranges only and production is on HOLD until samples and costing pass. Replace null with real prices only when they are approved.",
+  "collection": {
+    "handle": "drop-001",
+    "title": "Drop 001: Just hit a LiQ",
+    "status": "in-development",
+    "summary": "The first capsule. Planned as a numbered edition with private early access before a public release."
+  },
+  "products": [
+    {
+      "handle": "signature-hoodie",
+      "title": "Signature Hoodie",
+      "role": "The hero piece",
+      "status": "coming-soon",
+      "price": null,
+      "model": "signature-hoodie",
+      "summary": "Heavyweight washed-black hoodie. A small embroidered LiQ over the heart, the full strike across the back.",
+      "description": "From ten feet away it reads as a designer graphic garment. From three feet you notice the chart language. If you trade, you understand it immediately. Nearly blank on the front, with the architectural LiQ in tonal graphite across the back and one cobalt liquidity level breaking past the Q.",
+      "details": [
+        "Heavyweight cotton fleece, 450 to 550 GSM target",
+        "Double-layer hood, no drawcords",
+        "Structured dropped shoulder, slightly cropped designer proportion",
+        "Reinforced neckline, substantial ribbing",
+        "Back: high-density tonal screen print, 355 mm wide",
+        "Liquidity level: cobalt silicone transfer",
+        "Chest: tonal embroidered LiQ, about 1.5 in",
+        "Sleeve: LIQUIDITY microtype. Cuff: the strike icon",
+        "Woven interior label: LiQ / DROP 001, numbered"
+      ],
+      "edition": "Planned as a numbered edition",
+      "options": [
+        { "name": "Colorway", "values": ["Washed Black", "Bone", "Espresso"] },
+        { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] }
+      ],
+      "colorways": {
+        "Washed Black": {
+          "garment": "#1b1b1e",
+          "print": "#4a4a51",
+          "micro": "#d8d1c1",
+          "note": "Launch colorway"
+        },
+        "Bone": {
+          "garment": "#d9d2c3",
+          "print": "#c4bcab",
+          "micro": "#1b1b1e",
+          "note": "Proposed edition: cream on cream, black microtype"
+        },
+        "Espresso": {
+          "garment": "#2e221c",
+          "print": "#4a3a30",
+          "micro": "#b9b2a6",
+          "note": "Proposed edition: espresso, stone, antique silver"
+        }
+      }
+    },
+    {
+      "handle": "heavyweight-tee",
+      "title": "Heavyweight Tee",
+      "role": "The entry piece",
+      "status": "coming-soon",
+      "price": null,
+      "model": "heavyweight-tee",
+      "summary": "Oversized heavyweight tee carrying the strike in tonal print.",
+      "description": "The lower entry point into the collection, built with the same restraint as the hoodie. Dense neck rib, dropped shoulder, and the LiQ strike in tonal graphite.",
+      "details": [
+        "Heavyweight cotton, 260 to 320 GSM target",
+        "Slightly oversized shoulders",
+        "Dense neckline rib, premium neck tape",
+        "Tonal LiQ print with the cobalt liquidity level"
+      ],
+      "edition": "Drop 001",
+      "options": [
+        { "name": "Colorway", "values": ["Washed Black", "Bone"] },
+        { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] }
+      ],
+      "colorways": {
+        "Washed Black": {
+          "garment": "#1b1b1e",
+          "print": "#4a4a51",
+          "micro": "#d8d1c1",
+          "note": "Launch colorway"
+        },
+        "Bone": { "garment": "#d9d2c3", "print": "#c4bcab", "micro": "#1b1b1e", "note": "Proposed edition" }
+      }
+    },
+    {
+      "handle": "cap",
+      "title": "LiQ Cap",
+      "role": "The accessory",
+      "status": "coming-soon",
+      "price": null,
+      "model": "cap",
+      "summary": "Six-panel cap with the strike icon embroidered at the front.",
+      "description": "The Q crossing the line, on its own. The recurring device of the brand, set small and embroidered so it reads as a mark rather than a message.",
+      "details": [
+        "Six-panel crown, pre-curved brim",
+        "Embroidered strike icon with cobalt level",
+        "Construction and closure to be confirmed at sampling"
+      ],
+      "edition": "Drop 001",
+      "options": [
+        { "name": "Colorway", "values": ["Washed Black", "Bone"] },
+        { "name": "Size", "values": ["One size"] }
+      ],
+      "colorways": {
+        "Washed Black": {
+          "garment": "#1b1b1e",
+          "print": "#4a4a51",
+          "micro": "#d8d1c1",
+          "note": "Launch colorway"
+        },
+        "Bone": { "garment": "#d9d2c3", "print": "#c4bcab", "micro": "#1b1b1e", "note": "Proposed edition" }
+      }
+    }
+  ],
+  "later": ["Technical Zip Hoodie", "Structured Sweatpant", "Knit Long Sleeve", "Limited Atelier Jacket"]
+}

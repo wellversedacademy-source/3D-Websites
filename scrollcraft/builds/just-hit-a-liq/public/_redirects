@@ -1,0 +1,11 @@
+# Friendly aliases. Domain-level redirects (www -> apex, http -> https) are
+# configured in Cloudflare, see docs/DEPLOY.md.
+/collection    /shop/      301
+/drop          /shop/      301
+/drop-001      /shop/      301
+/cart          /bag/       301
+/hoodie        /product/signature-hoodie/   301
+/tee           /product/heavyweight-tee/    301
+/contact       /care/      301
+/privacy       /legal/privacy/   301
+/terms         /legal/terms/     301

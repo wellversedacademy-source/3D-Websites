@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!--@head {"title":"Just hit a LiQ | Designer apparel from the trading floor","description":"Just hit a LiQ is designer apparel built on the language of liquidity. Drop 001: heavyweight garments in black, graphite and bone, marked by one cobalt line.","path":"/"}-->
+    <link
+      rel="preload"
+      href="/models/signature-hoodie.glb"
+      as="fetch"
+      type="model/gltf-binary"
+      crossorigin
+      media="(min-width: 861px)"
+    />
+    <link
+      rel="preload"
+      href="/models/signature-hoodie-m.glb"
+      as="fetch"
+      type="model/gltf-binary"
+      crossorigin
+      media="(max-width: 860px)"
+    />
+    <script src="/engine/scrollcraft.js" defer></script>
+  </head>
+  <body class="page page--home">
+    <span data-sc-progress></span>
+    <div class="sc-grain" aria-hidden="true"></div>
+    <!--@header-->
+
+    <!-- The fixed 3D stage. Decorative: every fact it shows is also in the copy. -->
+    <div class="stage" data-stage aria-hidden="true">
+      <canvas data-stage-canvas></canvas>
+    </div>
+    <div class="annotations" data-annotations aria-hidden="true">
+      <p data-anchor="hood" data-ch-show="awaken"><span>Double-layer hood</span></p>
+      <p data-anchor="shoulder" data-ch-show="awaken"><span>Structured dropped shoulder</span></p>
+      <p data-anchor="neck" data-ch-show="awaken"><span>No drawcords. A cleaner line.</span></p>
+      <p data-anchor="hem" data-ch-show="awaken"><span>Heavyweight fleece, 450 to 550 GSM target</span></p>
+      <p data-anchor="layer:micro" data-ch-show="construct"><span>Bone microtype</span></p>
+      <p data-anchor="layer:level" data-ch-show="construct"><span>Cobalt silicone level</span></p>
+      <p data-anchor="layer:print" data-ch-show="construct"><span>Tonal graphite print</span></p>
+    </div>
+    <div class="strike-line" data-strike-line aria-hidden="true"></div>
+    <div class="loader" data-loader aria-hidden="true">
+      <svg viewBox="0 0 120 150" class="loader__mark">
+        <rect class="loader__body" x="20" y="22" width="80" height="84" rx="14" />
+        <rect class="loader__level" x="0" y="116" width="120" height="4" />
+        <rect class="loader__wick" x="78" y="106" width="6" height="34" />
+      </svg>
+    </div>
+
+    <!-- Chapter navigation as a price ladder. Price falls as you descend; the
+         cobalt level is where liquidity is taken. -->
+    <nav class="ladder" aria-label="Chapters" data-ladder>
+      <ol>
+        <li>
+          <a href="#open" data-level="4861.25"
+            ><span class="ladder__px">4,861.25</span><span class="ladder__name">Open</span></a
+          >
+        </li>
+        <li>
+          <a href="#light" data-level="4847.50"
+            ><span class="ladder__px">4,847.50</span><span class="ladder__name">Weight</span></a
+          >
+        </li>
+        <li>
+          <a href="#meaning" data-level="4833.75"
+            ><span class="ladder__px">4,833.75</span><span class="ladder__name">The mark</span></a
+          >
+        </li>
+        <li class="ladder__liq">
+          <a href="#strike" data-level="4820.00"
+            ><span class="ladder__px">4,820.00</span><span class="ladder__name">Liquidity</span></a
+          >
+        </li>
+        <li>
+          <a href="#construction" data-level="4806.25"
+            ><span class="ladder__px">4,806.25</span><span class="ladder__name">Construction</span></a
+          >
+        </li>
+        <li>
+          <a href="#drop" data-level="4792.50"
+            ><span class="ladder__px">4,792.50</span><span class="ladder__name">Drop 001</span></a
+          >
+        </li>
+        <li>
+          <a href="#manifesto" data-level="4778.75"
+            ><span class="ladder__px">4,778.75</span><span class="ladder__name">Conviction</span></a
+          >
+        </li>
+        <li>
+          <a href="#access" data-level="4765.00"
+            ><span class="ladder__px">4,765.00</span><span class="ladder__name">Access</span></a
+          >
+        </li>
+      </ol>
+      <p class="ladder__marker" data-ladder-marker aria-hidden="true">
+        <span data-ladder-price>4,861.25</span>
+      </p>
+    </nav>
+
+    <main id="main">
+      <!-- Opening frame -->
+      <section class="ch ch--open" id="open" data-ch="hero" data-sc-act="flow" data-sc-drift="#0b0b0d">
+        <figure class="ch__poster">
+          <picture
+            ><source srcset="/renders/home-hero.avif" type="image/avif" />
+            <img
+              src="/renders/home-hero.webp"
+              width="1600"
+              height="1000"
+              alt="The Signature Hoodie in washed black, front view, lit from above on a dark set"
+          /></picture>
+        </figure>
+        <div class="open__copy">
+          <h1 class="open__title">
+            <span class="open__kicker">Just hit a</span>
+            <!--@mark-->
+          </h1>
+          <p class="open__line">Designer apparel for the ones who see the level before price does.</p>
+          <p class="open__actions">
+            <a class="btn btn--solid" href="/shop/">Drop 001</a>
+            <a class="btn btn--line" href="#access">Release access</a>
+          </p>
+        </div>
+        <div class="cue" aria-hidden="true">
+          <span class="cue__wick"></span>
+          <span class="cue__level"></span>
+          <span class="cue__text">Price seeks liquidity</span>
+        </div>
+      </section>
+
+      <!-- Product awakening -->
+      <section class="ch ch--light" id="light" data-ch="awaken" data-sc-act="flow" data-sc-drift="#0d0d10">
+        <figure class="ch__poster">
+          <picture
+            ><source srcset="/renders/home-awaken.avif" type="image/avif" />
+            <img
+              src="/renders/home-awaken.webp"
+              width="1600"
+              height="1000"
+              alt="The hoodie at three-quarter angle, light raking across the hood and dropped shoulder"
+              loading="lazy"
+          /></picture>
+        </figure>
+        <div class="ch__copy ch__copy--lead">
+          <h2 class="display ch__h">Weight you feel before you read the mark.</h2>
+          <p class="ch__p">
+            The Signature Hoodie is heavyweight on purpose. A structured, slightly cropped silhouette that
+            holds its shape, with almost nothing on the front.
+          </p>
+          <ul class="facts">
+            <li>Heavyweight cotton fleece, 450 to 550 GSM target</li>
+            <li>Double-layer hood</li>
+            <li>Structured dropped shoulder</li>
+            <li>No drawcords. A cleaner line.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Meaning of LiQ: the quiet before the peak -->
+      <section
+        class="ch ch--meaning"
+        id="meaning"
+        data-ch="meaning"
+        data-sc-act="flow"
+        data-sc-drift="#070708"
+      >
+        <div class="ch__copy ch__copy--trail meaning">
+          <h2 class="visually-hidden">What LiQ means</h2>
+          <p class="meaning__line" data-sc-cue="0.18 0.95 0.3">Price moves toward liquidity.</p>
+          <p class="meaning__line" data-sc-cue="0.3 0.95 0.42">Traders wait for confirmation.</p>
+          <p class="meaning__line meaning__line--last" data-sc-cue="0.42 0.95 0.54">
+            The moment liquidity is taken becomes the mark.
+          </p>
+          <p class="ch__p meaning__note" data-sc-cue="0.5 0.95 0.6">
+            LiQ is liquidity. It is also timing, pressure, and the patience to execute when the level finally
+            gives.
+          </p>
+        </div>
+      </section>
+
+      <!-- The strike: the peak -->
+      <section class="ch ch--strike" id="strike" data-ch="strike" data-sc-act="flow" data-sc-drift="#090b13">
+        <figure class="ch__poster">
+          <picture
+            ><source srcset="/renders/home-strike.avif" type="image/avif" />
+            <img
+              src="/renders/home-strike.webp"
+              width="1600"
+              height="1000"
+              alt="The back of the hoodie: the LiQ mark in tonal graphite, crossed by one cobalt line"
+              loading="lazy"
+          /></picture>
+        </figure>
+        <div class="strike">
+          <p class="strike__stamp" data-stamp aria-live="polite">
+            <span>Liquidity / swept</span> <span data-stamp-time>Level 4,820.00</span>
+          </p>
+          <h2 class="display strike__h">Just hit a LiQ.</h2>
+          <p class="ch__p strike__p">
+            The Q's wick breaks the level. One cobalt line across a tonal back. If you trade, you already
+            know. If you don't, it is simply the best-made hoodie in the room.
+          </p>
+        </div>
+      </section>
+
+      <!-- Garment deconstruction -->
+      <section
+        class="ch ch--construct"
+        id="construction"
+        data-ch="construct"
+        data-sc-act="flow"
+        data-sc-drift="#101013"
+      >
+        <figure class="ch__poster">
+          <picture
+            ><source srcset="/renders/home-construct.avif" type="image/avif" />
+            <img
+              src="/renders/home-construct.webp"
+              width="1600"
+              height="1000"
+              alt="The back graphic lifted off the hoodie in layers: graphite print, cobalt line, bone microtype"
+              loading="lazy"
+          /></picture>
+        </figure>
+        <div class="ch__copy ch__copy--lead construct">
+          <h2 class="display ch__h">Four techniques. One mark.</h2>
+          <p class="ch__p">
+            Not one flat print. Each part of the strike is made a different way, so the graphic has depth you
+            can feel with a thumb.
+          </p>
+          <dl class="layers">
+            <div>
+              <dt>Tonal graphite print</dt>
+              <dd>
+                High-density screen print. The LiQ letters, slightly raised, graphite on washed black. 355 mm
+                wide.
+              </dd>
+            </div>
+            <div>
+              <dt>Cobalt silicone level</dt>
+              <dd>
+                A matte rubber line transferred across the back, continuing past the Q to the side seam.
+              </dd>
+            </div>
+            <div>
+              <dt>Bone microtype</dt>
+              <dd>
+                JUST HIT A above. LIQUIDITY / SWEPT, NY SESSION, 09:42:17 below. A price ladder along the side
+                seam.
+              </dd>
+            </div>
+            <div>
+              <dt>Tonal embroidery</dt>
+              <dd>
+                The chest mark, about 1.5 in over the heart. LIQUIDITY on one sleeve, the strike on the
+                opposite cuff.
+              </dd>
+            </div>
+          </dl>
+          <div class="controls">
+            <div class="controls__group" role="group" aria-label="Garment view">
+              <span class="label">View</span>
+              <button type="button" data-view="layers" aria-pressed="true">Layers</button>
+              <button type="button" data-view="front" aria-pressed="false">Front</button>
+              <button type="button" data-view="back" aria-pressed="false">Back</button>
+              <button type="button" data-view="detail" aria-pressed="false">Detail</button>
+            </div>
+            <div class="controls__group" role="group" aria-label="Colorway">
+              <span class="label">Colorway</span>
+              <button type="button" data-colorway="Washed Black" aria-pressed="true">
+                <i style="--sw: #1b1b1e" aria-hidden="true"></i>Washed Black
+              </button>
+              <button type="button" data-colorway="Bone" aria-pressed="false">
+                <i style="--sw: #d9d2c3" aria-hidden="true"></i>Bone
+              </button>
+              <button type="button" data-colorway="Espresso" aria-pressed="false">
+                <i style="--sw: #2e221c" aria-hidden="true"></i>Espresso
+              </button>
+            </div>
+            <p class="fine" data-colorway-note>
+              Washed Black is the launch colorway. Bone and Espresso are proposed editions.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured drop -->
+      <section class="ch ch--drop covers" id="drop" aria-labelledby="drop-h">
+        <div class="wrap">
+          <div class="drop__head">
+            <h2 id="drop-h" class="display drop__h">Drop 001. <em>Just hit a LiQ.</em></h2>
+            <p class="ch__p">
+              Three pieces to start. Planned as a numbered edition, with private early access before the
+              public release. Prices are set at release.
+            </p>
+          </div>
+          <div class="drop__grid"><!--@cards--></div>
+          <p class="drop__more"><a class="btn btn--line" href="/shop/">See the full drop</a></p>
+        </div>
+      </section>
+
+      <!-- Manifesto -->
+      <section
+        class="ch ch--manifesto"
+        id="manifesto"
+        data-ch="manifesto"
+        data-sc-act="flow"
+        data-sc-drift="#0b0b0d"
+      >
+        <figure class="ch__poster">
+          <picture
+            ><source srcset="/renders/home-manifesto.avif" type="image/avif" />
+            <img
+              src="/renders/home-manifesto.webp"
+              width="1600"
+              height="1000"
+              alt="The hoodie seen from below, far back in the haze"
+              loading="lazy"
+          /></picture>
+        </figure>
+        <div class="manifesto">
+          <h2 class="visually-hidden">Manifesto</h2>
+          <p data-sc-cue="0.12 1 0.24">They called it noise.<br />You called it a level.</p>
+          <p data-sc-cue="0.22 1 0.34">You waited while everyone else chased.</p>
+          <p data-sc-cue="0.32 1 0.44">
+            Discipline looks like nothing, right up until it looks like everything.
+          </p>
+          <p class="manifesto__end" data-sc-cue="0.42 1 0.54">Wear the moment it stopped being quiet.</p>
+        </div>
+      </section>
+
+      <!-- Community and release access -->
+      <section class="ch ch--access covers" id="access" aria-labelledby="access-h">
+        <div class="wrap access">
+          <div class="access__intro">
+            <h2 id="access-h" class="display access__h">Release access.</h2>
+            <p class="ch__p">
+              Drop announcements, early access, restocks and the occasional note from the brand. Nothing more,
+              and only when there is something to say.
+            </p>
+          </div>
+          <form class="tag" method="post" action="/api/access" data-access novalidate>
+            <div class="tag__label" aria-hidden="true">
+              <span>LiQ / Drop 001</span>
+              <span>Garment ___ / 150</span>
+              <span class="tag__strike" data-tag-strike>Your strike: not yet</span>
+            </div>
+            <input type="hidden" name="strike" data-strike-field />
+            <div class="field">
+              <label for="a-email">Email</label>
+              <input
+                id="a-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                aria-describedby="a-email-err"
+              />
+              <p class="field__err" id="a-email-err" data-err="email"></p>
+            </div>
+            <div class="field">
+              <label for="a-phone">Mobile, for text alerts <span class="opt-note">(optional)</span></label>
+              <input
+                id="a-phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="+1 203 555 0123"
+                aria-describedby="a-phone-hint a-phone-err"
+              />
+              <p class="field__hint" id="a-phone-hint">Include your country code.</p>
+              <p class="field__err" id="a-phone-err" data-err="phone"></p>
+            </div>
+            <label class="check">
+              <input type="checkbox" name="smsConsent" aria-describedby="a-sms-err" />
+              <span>Text me about releases. Message and data rates may apply. Reply STOP to opt out.</span>
+            </label>
+            <p class="field__err" id="a-sms-err" data-err="smsConsent"></p>
+            <fieldset class="interests" aria-describedby="a-int-err">
+              <legend>Tell me about</legend>
+              <label class="check"
+                ><input type="checkbox" name="interests" value="drops" checked /><span
+                  >Drop announcements</span
+                ></label
+              >
+              <label class="check"
+                ><input type="checkbox" name="interests" value="early-access" checked /><span
+                  >Early access</span
+                ></label
+              >
+              <label class="check"
+                ><input type="checkbox" name="interests" value="restocks" /><span>Restocks</span></label
+              >
+              <label class="check"
+                ><input type="checkbox" name="interests" value="updates" /><span>Brand updates</span></label
+              >
+            </fieldset>
+            <p class="field__err" id="a-int-err" data-err="interests"></p>
+            <div class="hp" aria-hidden="true">
+              <label>Company <input name="company" tabindex="-1" autocomplete="off" /></label>
+            </div>
+            <button class="btn btn--solid" type="submit">Request access</button>
+            <p class="tag__result" role="status" aria-live="polite" data-access-result></p>
+            <p class="fine">
+              By requesting access you agree to our <a href="/legal/privacy/">privacy policy</a>.
+            </p>
+          </form>
+        </div>
+      </section>
+
+      <!-- Closing frame -->
+      <section class="ch ch--close covers" id="close" aria-labelledby="close-h">
+        <div class="close wrap">
+          <h2 id="close-h" class="visually-hidden">Just hit a LiQ</h2>
+          <div class="close__mark" data-close-mark><!--@mark-plain--></div>
+          <nav class="close__nav" aria-label="Site">
+            <a href="/shop/">Drop 001</a>
+            <a href="/#meaning">The mark</a>
+            <a href="/#access">Release access</a>
+            <a href="/care/">Care</a>
+            <a href="/bag/">Bag</a>
+          </nav>
+        </div>
+      </section>
+    </main>
+    <!--@footer-->
+    <script type="module" src="/src/pages/home.ts"></script>
+  </body>
+</html>
