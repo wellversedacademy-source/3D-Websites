@@ -10,13 +10,13 @@ type View = 'front' | 'back' | 'detail';
 
 const FRAMES: Record<string, Record<View, Partial<Pose>>> = {
   'signature-hoodie': {
-    front: { az: 0.28, el: 0.04, dist: 2.35, ty: -0.06, rot: 0 },
-    back: { az: 0.2, el: 0.04, dist: 2.25, ty: -0.1, rot: Math.PI },
+    front: { az: 0.28, el: 0.04, dist: 3.15, ty: -0.07, rot: 0 },
+    back: { az: 0.2, el: 0.04, dist: 3.05, ty: -0.09, rot: Math.PI },
     detail: { az: 0.15, el: 0.04, dist: 0.62, ty: 0.115, rot: 0.42, key: 1.1 },
   },
   'heavyweight-tee': {
-    front: { az: 0.28, el: 0.04, dist: 2.2, ty: -0.08, rot: 0 },
-    back: { az: 0.2, el: 0.04, dist: 2.1, ty: -0.1, rot: Math.PI },
+    front: { az: 0.28, el: 0.04, dist: 2.95, ty: -0.1, rot: 0 },
+    back: { az: 0.2, el: 0.04, dist: 2.85, ty: -0.1, rot: Math.PI },
     detail: { az: 0.15, el: 0.04, dist: 0.6, ty: 0.1, rot: 0.42, key: 1.1 },
   },
   cap: {

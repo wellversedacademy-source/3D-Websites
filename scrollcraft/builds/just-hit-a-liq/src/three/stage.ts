@@ -204,6 +204,10 @@ export class Stage {
     );
     this.camera.lookAt(0, p.ty, 0);
     // Shift the composition without moving the camera off its orbit.
+    // Always frame for the canvas's own shape (full window on the homepage,
+    // the 4:5 box on product pages).
+    const aspect = this.canvas.clientWidth / Math.max(1, this.canvas.clientHeight);
+    if (aspect && Math.abs(aspect - this.camera.aspect) > 1e-3) this.camera.aspect = aspect;
     this.camera.filmOffset = -p.shift * this.camera.filmGauge;
     this.camera.updateProjectionMatrix();
 
