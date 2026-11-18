@@ -72,3 +72,27 @@ harsh sleeve ridges on light colorways.
   are in place; a human pass is still needed).
 - Safari and Firefox rendering.
 - Cloudflare deploy, DNS and KV: not performed, by design.
+
+## Re-run after the product boards update · 2026-11-18
+
+Same environment (production build on the Workers runtime, headless Chromium,
+software WebGL).
+
+| Check | Result |
+|---|---|
+| Format, lint, strict type check, production build | Pass |
+| Unit tests | 25 / 25 |
+| Interaction suite (`lab/qa.cjs`), now 15 routes × 3 viewports plus gallery checks | **116 / 116** |
+| Scroll harness, desktop and phone | No dead scroll; all copy ≥ 4.5:1 at its worst frame |
+
+New checks: product gallery thumbnails swap the main image; the 3D view loads
+only on request; the jacket shows its honest placeholder; without WebGL the 3D
+button hides itself and the photo stays.
+
+Fixed during this pass: size dropdown unstyled outside the homepage; first
+card stretching its text away from the image; the 3D button staying visible
+without WebGL (a CSS rule overrode `hidden`); faint back print on the 3D
+hoodie.
+
+Still not verified: real phones, real GPUs, Safari/Firefox, Lighthouse, a
+screen-reader pass (unchanged from the first run).
