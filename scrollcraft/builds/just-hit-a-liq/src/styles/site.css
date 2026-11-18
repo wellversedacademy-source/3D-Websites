@@ -992,3 +992,6 @@ html.is-capture .product__view {
 .thumbs li:has(> [hidden]) {
   display: none;
 }
+.viewer__views[hidden] {
+  display: none;
+}
