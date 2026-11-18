@@ -12,18 +12,19 @@ item replaces a placeholder at a known path.
 
 | Asset | Path | Status | Made with |
 |---|---|---|---|
-| LiQ strike mark | `src/brand/mark.ts` (generates every logo, favicon, garment print) | **Provisional.** Built from the agreed rules: candlestick letters, Q wick piercing one cobalt level | Code |
+| LiQ mark | `src/brand/mark.ts` + `glyphs.json` (every logo, favicon, garment print) | **Follows the owner's product boards**: serif L and Q (Bodoni Moda outlines), candlestick i, cobalt level through the letters. Still to be redrawn as final vector | `scripts/build-mark.mjs` |
 | Garment models | `public/models/{signature-hoodie,heavyweight-tee,cap}{,-m}.glb` | **Placeholder sculpts**, desktop + phone LOD | `scripts/build-garments.mjs` |
-| Product renders | `public/renders/<handle>-{front,back,card}.{avif,webp}` 1200×1500 | Rendered from the scene | `npm run posters` |
+| **Product photos** | `public/photos/<handle>-{front,back,angle}.{avif,webp}` 960×1200, `-detail-*.webp` | Cut from the owner's product boards (5 of 7 pieces) | `scripts/crop-boards.mjs` from `assets-src/boards/` |
+| Cap renders | `public/renders/cap-{front,back,card}.{avif,webp}` | Stand-in until the cap board is re-uploaded | `npm run posters` |
 | Homepage posters (no-WebGL fallback) | `public/renders/home-*.{avif,webp}` 1600×1000 | Rendered from the scene | `npm run posters` |
-| Social images | `public/og/*.jpg` 1200×630 | Rendered from the scene | `npm run posters` |
+| Social images | `public/og/*.jpg` 1200×630 | Front + back photos per piece; homepage and cap from the scene | `crop-boards.mjs`, `npm run posters` |
 | Icons | `public/favicon.ico`, `/icons/*.png`, `favicon.svg` (build) | From the strike icon | `npm run posters` |
 | Fonts | Bodoni Moda, IBM Plex Mono (SIL Open Font License) | **Provisional choice**, the conversation named no faces | npm `@fontsource` |
 | Palette | `src/styles/site.css` `:root` | **Provisional hex values** for black, graphite, bone, stone, cobalt | — |
 
-The brand conversation's 11 concept images and the original sketch could not
-be downloaded from the share link. If you want them kept with the project,
-upload them and they go in `docs/reference/` (never on the public site).
+Still missing as files: the Limited Atelier Jacket board and the Designer Cap
+board (see `assets-src/README.md`). Until they arrive the jacket shows an
+"images coming soon" placeholder and the cap shows its 3D render.
 
 ## 2. What is still needed
 

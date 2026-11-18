@@ -49,10 +49,46 @@ function head(meta: Meta, origin: string): string {
 // ---------------------------------------------------------------------------
 // Product pages are generated from products.json so the data has one home.
 // ---------------------------------------------------------------------------
-function productPage(p: (typeof catalog.products)[number]): string {
+type P = (typeof catalog.products)[number];
+type Img = { src: string; avif: boolean; alt: string; caption?: string };
+
+/** Every still image a product has, in display order. Photos (from the
+ *  owner's boards) win over 3D renders; a product with neither has none. */
+function images(p: P): Img[] {
+  const out: Img[] = [];
+  if (p.photos) {
+    for (const [v, label] of [
+      ['front', 'front'],
+      ['back', 'back'],
+      ['angle', 'three-quarter'],
+    ] as const)
+      out.push({ src: `/photos/${p.handle}-${v}`, avif: true, alt: `${p.title}, ${label} view` });
+    for (const [key, caption] of p.gallery as [string, string][])
+      out.push({
+        src: `/photos/${p.handle}-detail-${key}`,
+        avif: false,
+        alt: `${p.title}: ${caption}`,
+        caption,
+      });
+  } else if (p.model) {
+    out.push({ src: `/renders/${p.handle}-front`, avif: true, alt: `${p.title}, front view, 3D render` });
+    out.push({ src: `/renders/${p.handle}-back`, avif: true, alt: `${p.title}, back view, 3D render` });
+  }
+  return out;
+}
+
+const picture = (img: Img, attrs: string) =>
+  `<picture>${img.avif ? `<source srcset="${img.src}.avif" type="image/avif">` : ''}<img src="${img.src}.webp" alt="${esc(img.alt)}" ${attrs}></picture>`;
+
+/** Placeholder for a product whose imagery has not been supplied yet: the
+ *  mark and the name, never a fake photo. */
+const pending = (p: P) =>
+  `<div class="pending" role="img" aria-label="${esc(p.title)}: images coming soon">${markSVG({ className: 'mark' })}<span>${esc(p.title)}</span><span class="pending__note">Images coming soon</span></div>`;
+
+function productPage(p: P): string {
   const colorways = p.options.find((o) => o.name === 'Colorway')!.values;
   const sizes = p.options.find((o) => o.name === 'Size')!.values;
-  const cw = p.colorways as Record<string, { garment: string; note: string }>;
+  const cw = p.colorways as unknown as Record<string, { garment: string; note: string }>;
   const radios = (name: string, values: string[], swatch = false) =>
     values
       .map(
@@ -69,7 +105,7 @@ function productPage(p: (typeof catalog.products)[number]): string {
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <!--@head ${JSON.stringify({ title: p.title, description: p.summary, path: `/product/${p.handle}/`, image: `/og/${p.handle}.jpg`, type: 'product' })}-->
+    <!--@head ${JSON.stringify({ title: p.title, description: p.summary, path: `/product/${p.handle}/`, image: p.photos || p.model ? `/og/${p.handle}.jpg` : '/og/og-default.jpg', type: 'product' })}-->
     <!--@product-jsonld ${p.handle}-->
   </head>
   <body class="page page--product" data-handle="${p.handle}">
@@ -77,18 +113,34 @@ function productPage(p: (typeof catalog.products)[number]): string {
     <main id="main" class="product">
       <nav class="crumbs wrap" aria-label="Breadcrumb"><a href="/shop/">Drop 001</a><span aria-hidden="true">/</span><span aria-current="page">${esc(p.title)}</span></nav>
       <div class="product__grid wrap">
-        <section class="product__view" aria-label="${esc(p.title)} viewer">
-          <div class="viewer" data-viewer data-model="${p.model}">
-            <picture class="viewer__poster">
-              <source srcset="/renders/${p.handle}-front.avif" type="image/avif">
-              <img src="/renders/${p.handle}-front.webp" width="1200" height="1500" alt="${esc(p.title)} in Washed Black, front view, rendered on a dark set" fetchpriority="high">
-            </picture>
+        <section class="product__view" aria-label="${esc(p.title)} images">
+          <div class="viewer" data-viewer data-model="${p.model ?? ''}">
+            ${(() => {
+              const imgs = images(p);
+              return imgs.length
+                ? `<div class="viewer__poster" data-main>${picture(imgs[0], 'width="960" height="1200" fetchpriority="high"')}</div>`
+                : pending(p);
+            })()}
           </div>
-          <div class="viewer__views" role="group" aria-label="View">
+          <div class="viewer__views" role="group" aria-label="3D view" hidden data-3d-views>
             <button type="button" data-view="front" aria-pressed="true">Front</button>
             <button type="button" data-view="back" aria-pressed="false">Back</button>
             <button type="button" data-view="detail" aria-pressed="false">Detail</button>
           </div>
+          ${(() => {
+            const imgs = images(p);
+            if (imgs.length < 2 && !p.model) return '';
+            const thumbs = imgs
+              .map(
+                (img, i) =>
+                  `<li><button type="button" class="thumb" data-thumb="${img.src}" data-avif="${img.avif}" data-alt="${esc(img.alt)}" aria-pressed="${i === 0}" aria-label="Show ${esc(img.caption ?? img.alt)}">${picture(img, 'width="160" height="200" loading="lazy"')}</button></li>`,
+              )
+              .join('');
+            const three = p.model
+              ? `<li><button type="button" class="thumb thumb--3d" data-thumb-3d aria-pressed="false" aria-label="Turn it in 3D"><span>3D</span></button></li>`
+              : '';
+            return `<ul class="thumbs" aria-label="Images">${thumbs}${three}</ul>`;
+          })()}
         </section>
         <section class="product__info" aria-labelledby="product-title">
           <p class="label">${esc(p.role)} · ${esc(p.edition)}</p>
@@ -125,14 +177,19 @@ function productPage(p: (typeof catalog.products)[number]): string {
 
 /** Product card, shared by the homepage drop and /shop/. Static, so it reads
  *  and shops without JavaScript; scripts only add the bag behaviour. */
-function card(p: (typeof catalog.products)[number], i: number): string {
+function card(p: P, i: number): string {
   const colorways = p.options.find((o) => o.name === 'Colorway')!.values;
   const sizes = p.options.find((o) => o.name === 'Size')!.values;
-  const cw = p.colorways as Record<string, { garment: string }>;
+  const cw = p.colorways as unknown as Record<string, { garment: string }>;
   const id = `c-${p.handle}`;
   return `<article class="card" aria-labelledby="${id}-t">
   <a class="card__media" href="/product/${p.handle}/" tabindex="-1" aria-hidden="true">
-    <picture><source srcset="/renders/${p.handle}-card.avif" type="image/avif"><img src="/renders/${p.handle}-card.webp" width="1200" height="1500" alt="" loading="${i === 0 ? 'eager' : 'lazy'}"></picture>
+    ${(() => {
+      const img = images(p)[0];
+      return img
+        ? picture({ ...img, alt: '' }, `width="960" height="1200" loading="${i === 0 ? 'eager' : 'lazy'}"`)
+        : pending(p);
+    })()}
   </a>
   <div class="card__head">
     <h3 class="card__title" id="${id}-t"><a href="/product/${p.handle}/">${esc(p.title)}</a></h3>
@@ -159,7 +216,7 @@ function card(p: (typeof catalog.products)[number], i: number): string {
 }
 
 function generateProductPages() {
-  for (const p of catalog.products) {
+  for (const p of catalog.products as P[]) {
     const dir = path.join(ROOT, 'product', p.handle);
     fs.mkdirSync(dir, { recursive: true });
     const file = path.join(dir, 'index.html');
@@ -220,7 +277,9 @@ function brandSite(origin: string, env: Record<string, string>): Plugin {
               name: p.title,
               description: p.description,
               brand: { '@type': 'Brand', name: BRAND },
-              image: [`${origin}/renders/${p.handle}-front.webp`, `${origin}/renders/${p.handle}-back.webp`],
+              image: images(p)
+                .slice(0, 3)
+                .map((img) => `${origin}${img.src}.webp`),
               url: `${origin}/product/${p.handle}/`,
             };
             return `<script type="application/ld+json">${JSON.stringify(ld)}</script>`;
@@ -245,6 +304,24 @@ function brandSite(origin: string, env: Record<string, string>): Plugin {
             env.VITE_CARE_EMAIL
               ? `Write to <a href="mailto:${env.VITE_CARE_EMAIL}">${env.VITE_CARE_EMAIL}</a>. We reply within two business days.`
               : 'A customer care address is published before release. Until then, <a href="/#access">request release access</a> and we will be in touch.',
+          )
+          .replace(
+            '<!--@loader-->',
+            strikeIconSVG('#e8e3d7', '#3a63f2').replace(
+              '<svg ',
+              '<svg class="loader__mark" aria-hidden="true" ',
+            ),
+          )
+          .replace(
+            '<!--@cards:home-->',
+            ['signature-hoodie', 'technical-zip-hoodie', 'heavyweight-tee']
+              .map((h, i) =>
+                card(
+                  catalog.products.find((p) => p.handle === h)!,
+                  i,
+                ),
+              )
+              .join(''),
           )
           .replace('<!--@cards-->', catalog.products.map(card).join(''));
       },

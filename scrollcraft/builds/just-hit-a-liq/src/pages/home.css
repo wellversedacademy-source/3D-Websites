@@ -44,26 +44,18 @@ main {
   width: 3.4rem;
   fill: none;
 }
-.loader__body {
-  fill: none;
-  stroke: var(--ink-soft);
-  stroke-width: 8;
+.loader__mark rect {
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+  animation: level 1.4s var(--ease) infinite;
 }
-.loader__level {
-  fill: var(--accent);
-}
-.loader__wick {
-  fill: var(--ink);
-  transform-origin: 50% 0;
-  animation: wick 1.4s var(--ease) infinite;
-}
-@keyframes wick {
+@keyframes level {
   0% {
-    transform: scaleY(0.1);
+    transform: scaleX(0);
   }
   60%,
   100% {
-    transform: scaleY(1);
+    transform: scaleX(1);
   }
 }
 
@@ -132,8 +124,8 @@ main {
   font-weight: 400;
 }
 .open__kicker {
-  font: 500 0.78rem/1 var(--text);
-  letter-spacing: 0.32em;
+  font: 500 0.95rem/1 var(--display);
+  letter-spacing: 0.42em;
   text-transform: uppercase;
   color: var(--ink);
 }
@@ -872,7 +864,7 @@ main {
 /* ------------------------------------------------------- reduced motion -- */
 @media (prefers-reduced-motion: reduce) {
   .cue__wick,
-  .loader__wick {
+  .loader__mark rect {
     animation: none;
   }
   .strike-line,

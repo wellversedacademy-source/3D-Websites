@@ -34,7 +34,8 @@ const jobs = [
   { url: '/?capture=construct:layers', w: 1600, h: 1000, out: 'renders/home-construct' },
   { url: '/?capture=hero', w: 1200, h: 630, out: 'og/og-default', jpg: true },
 ];
-for (const handle of ['signature-hoodie', 'heavyweight-tee', 'cap']) {
+// Pieces photographed on the owner's boards use those photos instead (crop-boards.mjs).
+for (const handle of ['cap']) {
   jobs.push({ url: `/product/${handle}/?capture=front`, w: 1200, h: 1500, out: `renders/${handle}-front` });
   jobs.push({ url: `/product/${handle}/?capture=back`, w: 1200, h: 1500, out: `renders/${handle}-back` });
   jobs.push({

@@ -1,76 +1,183 @@
 {
-  "_readme": "Drop 001 product data. Shaped like a Shopify Storefront API product (handle, options, variants, selectedOptions, availableForSale) so the local data can be swapped for live data without changing the UI. Prices are null on purpose: the brand plan lists planning ranges only and production is on HOLD until samples and costing pass. Replace null with real prices only when they are approved.",
+  "_readme": "Drop 001 product data, taken from the owner's product boards (assets-src/boards). Shaped like a Shopify Storefront API product (handle, options, variants via selectedOptions) so it can be swapped for live data. Prices are null on purpose: no prices are approved yet. Replace null only with approved prices.",
   "collection": {
     "handle": "drop-001",
     "title": "Drop 001: Just hit a LiQ",
     "status": "in-development",
-    "summary": "The first capsule. Planned as a numbered edition with private early access before a public release."
+    "summary": "Seven pieces, each numbered. Private early access before a public release."
   },
   "products": [
     {
       "handle": "signature-hoodie",
-      "title": "Signature Hoodie",
+      "title": "Signature Heavyweight Hoodie",
       "role": "The hero piece",
       "status": "coming-soon",
       "price": null,
       "model": "signature-hoodie",
-      "summary": "Heavyweight washed-black hoodie. A small embroidered LiQ over the heart, the full strike across the back.",
-      "description": "From ten feet away it reads as a designer graphic garment. From three feet you notice the chart language. If you trade, you understand it immediately. Nearly blank on the front, with the architectural LiQ in tonal graphite across the back and one cobalt liquidity level breaking past the Q.",
+      "photos": true,
+      "summary": "500 GSM washed-black fleece. The Q and its liquidity line over the heart, the full strike across the back.",
+      "description": "From ten feet away it reads as a designer garment. From three feet you notice the chart language. If you trade, you understand it immediately. Wide and slightly cropped, with a structured drop shoulder and a double-layer hood with no drawcord.",
       "details": [
-        "Heavyweight cotton fleece, 450 to 550 GSM target",
-        "Double-layer hood, no drawcords",
-        "Structured dropped shoulder, slightly cropped designer proportion",
-        "Reinforced neckline, substantial ribbing",
-        "Back: high-density tonal screen print, 355 mm wide",
-        "Liquidity level: cobalt silicone transfer",
-        "Chest: tonal embroidered LiQ, about 1.5 in",
-        "Sleeve: LIQUIDITY microtype. Cuff: the strike icon",
-        "Woven interior label: LiQ / DROP 001, numbered"
+        "500 GSM cotton fleece, washed black",
+        "Wide, slightly cropped fit with a structured drop shoulder",
+        "Double-layer hood, no drawcord",
+        "Reinforced neckline and shoulder seams",
+        "Substantial ribbing at cuffs and hem",
+        "Chest: embroidered Q with the cobalt liquidity line",
+        "Back: JUST HIT A, the LiQ in high-density tonal print, cobalt level and price ladder; LIQUIDITY / SWEPT, NY SESSION, 09:42:17",
+        "Sleeve: LIQUIDITY. Cuff: the Q strike",
+        "Woven label: LiQ / DROP 001, garment number of 150"
       ],
-      "edition": "Planned as a numbered edition",
+      "gallery": [
+        ["label", "Interior woven label"],
+        ["chest", "Chest embroidery"],
+        ["back", "Back graphic, high-density tonal"],
+        ["fleece", "Fleece interior, 500 GSM"],
+        ["neck", "Reinforced neckline"],
+        ["cuff", "Sleeve cuff, the Q strike"]
+      ],
+      "edition": "Limited to 150",
       "options": [
-        { "name": "Colorway", "values": ["Washed Black", "Bone", "Espresso"] },
+        { "name": "Colorway", "values": ["Washed Black"] },
         { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] }
       ],
       "colorways": {
         "Washed Black": {
           "garment": "#1b1b1e",
-          "print": "#4a4a51",
+          "print": "#5e5e67",
           "micro": "#d8d1c1",
-          "note": "Launch colorway"
+          "note": "Drop 001 colorway"
         },
         "Bone": {
           "garment": "#d9d2c3",
           "print": "#c4bcab",
           "micro": "#1b1b1e",
-          "note": "Proposed edition: cream on cream, black microtype"
+          "note": "Proposed future edition: cream on cream"
         },
         "Espresso": {
           "garment": "#2e221c",
           "print": "#4a3a30",
           "micro": "#b9b2a6",
-          "note": "Proposed edition: espresso, stone, antique silver"
+          "note": "Proposed future edition: espresso, stone, antique silver"
+        }
+      }
+    },
+    {
+      "handle": "technical-zip-hoodie",
+      "title": "Technical Zip Hoodie",
+      "role": "The premium piece",
+      "status": "coming-soon",
+      "price": null,
+      "model": null,
+      "photos": true,
+      "summary": "460 GSM technical fleece in deep graphite, articulated sleeves, two-way matte black zipper.",
+      "description": "The technical counterpart to the Signature Hoodie. Structured double-knit fleece, contoured sleeve panels and concealed zip pockets, with PRICE SEEKS LIQUIDITY set under the back graphic and EXECUTION running beside the pocket.",
+      "details": [
+        "460 GSM technical fleece, structured double-knit",
+        "Deep graphite",
+        "Wide, slightly cropped fit",
+        "Articulated sleeves with contoured panels",
+        "Double-layer structured hood",
+        "Two-way matte black zipper",
+        "Concealed zipper pockets",
+        "Back: JUST HIT A, LiQ, cobalt level and price ladder; PRICE SEEKS LIQUIDITY, NY SESSION, 09:31:08",
+        "Woven label: LiQ / DROP 001, garment number of 100"
+      ],
+      "gallery": [
+        ["label", "Interior woven label"],
+        ["zipper", "Two-way matte black zipper"],
+        ["chest", "Chest embroidery"],
+        ["back", "Back graphic, high-density with silicone line"],
+        ["hood", "Double-layer structured hood"],
+        ["pocket", "Concealed zipper pocket"]
+      ],
+      "edition": "Limited to 100",
+      "options": [
+        { "name": "Colorway", "values": ["Deep Graphite"] },
+        { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] }
+      ],
+      "colorways": {
+        "Deep Graphite": {
+          "garment": "#26262a",
+          "print": "#4a4a51",
+          "micro": "#d8d1c1",
+          "note": "Drop 001 colorway"
         }
       }
     },
     {
       "handle": "heavyweight-tee",
-      "title": "Heavyweight Tee",
+      "title": "Heavyweight Oversized Tee",
       "role": "The entry piece",
       "status": "coming-soon",
       "price": null,
       "model": "heavyweight-tee",
-      "summary": "Oversized heavyweight tee carrying the strike in tonal print.",
-      "description": "The lower entry point into the collection, built with the same restraint as the hoodie. Dense neck rib, dropped shoulder, and the LiQ strike in tonal graphite.",
+      "photos": true,
+      "summary": "300 GSM garment-washed jersey in washed stone, the strike across the back.",
+      "description": "The entry point into the collection, built with the same restraint. Oversized dropped shoulders, a slightly boxed body, a dense neck rib, and the London session on the back.",
       "details": [
-        "Heavyweight cotton, 260 to 320 GSM target",
-        "Slightly oversized shoulders",
-        "Dense neckline rib, premium neck tape",
-        "Tonal LiQ print with the cobalt liquidity level"
+        "300 GSM cotton jersey, garment washed",
+        "Washed stone",
+        "Oversized dropped shoulders, slightly boxed body",
+        "Premium dense neck rib, reinforced neck tape",
+        "Cut-and-sew construction",
+        "Back: JUST HIT A, LiQ, cobalt level and price ladder; LIQUIDITY / SWEPT, LONDON SESSION, 08:16:42",
+        "Chest: embroidered Q. Sleeve: LIQUIDITY",
+        "Woven label: LiQ / DROP 001, garment number of 150"
       ],
-      "edition": "Drop 001",
+      "gallery": [
+        ["label", "Interior woven label"],
+        ["chest", "Chest embroidery"],
+        ["back", "Back graphic, high-density tonal"],
+        ["jersey", "Cotton jersey, 300 GSM"],
+        ["neck", "Dense neckline rib"],
+        ["sleeve", "Sleeve detail, LIQUIDITY"]
+      ],
+      "edition": "Limited to 150",
       "options": [
-        { "name": "Colorway", "values": ["Washed Black", "Bone"] },
+        { "name": "Colorway", "values": ["Washed Stone"] },
+        { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] }
+      ],
+      "colorways": {
+        "Washed Stone": {
+          "garment": "#3a3a3c",
+          "print": "#7a7a80",
+          "micro": "#d8d1c1",
+          "note": "Drop 001 colorway"
+        }
+      }
+    },
+    {
+      "handle": "structured-sweatpants",
+      "title": "Structured Sweatpants",
+      "role": "The set",
+      "status": "coming-soon",
+      "price": null,
+      "model": null,
+      "photos": true,
+      "summary": "460 to 500 GSM washed-black fleece, a price ladder down the side seam.",
+      "description": "Built to pair with the hoodie. A relaxed, structured leg with a subtle taper, an internal drawcord, the Q on the thigh, and LIQUIDITY / SWEPT on the back pocket.",
+      "details": [
+        "460 to 500 GSM cotton fleece, washed black",
+        "Relaxed structured leg, subtle taper",
+        "Premium elastic waistband, internal drawcord",
+        "Back patch pocket: LIQUIDITY / SWEPT, NY SESSION, 09:42:17",
+        "Premium topstitching and structured seams",
+        "Substantial ribbed ankle cuffs",
+        "Thigh: embroidered Q. Side seam: price ladder. Ankle cuff: the Q strike",
+        "Woven label: LiQ / DROP 001, garment number of 150"
+      ],
+      "gallery": [
+        ["label", "Interior woven label"],
+        ["waist", "Elastic waistband, internal drawcord"],
+        ["thigh", "Thigh embroidery"],
+        ["ladder", "Side seam price ladder"],
+        ["pocket", "Back pocket graphic"],
+        ["cuff", "Ankle cuff, the Q strike"]
+      ],
+      "edition": "Limited to 150",
+      "options": [
+        { "name": "Colorway", "values": ["Washed Black"] },
         { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] }
       ],
       "colorways": {
@@ -78,40 +185,111 @@
           "garment": "#1b1b1e",
           "print": "#4a4a51",
           "micro": "#d8d1c1",
-          "note": "Launch colorway"
-        },
-        "Bone": { "garment": "#d9d2c3", "print": "#c4bcab", "micro": "#1b1b1e", "note": "Proposed edition" }
+          "note": "Drop 001 colorway"
+        }
+      }
+    },
+    {
+      "handle": "signature-knit-long-sleeve",
+      "title": "Signature Knit Long Sleeve",
+      "role": "The layer",
+      "status": "coming-soon",
+      "price": null,
+      "model": null,
+      "photos": true,
+      "summary": "280 to 320 GSM heavy jersey knit in washed bone, a vertical price ladder on the back.",
+      "description": "The light piece of the drop. A slightly oversized knit with structured dropped shoulders, and on the back a single price ladder with the cobalt level marked at 4,360.00.",
+      "details": [
+        "Heavy jersey knit, 280 to 320 GSM",
+        "Washed bone",
+        "Slightly oversized, structured dropped shoulders",
+        "Premium rib knit crewneck, ribbed cuffs",
+        "Washed, soft finish",
+        "Back: JUST HIT A, LiQ, a vertical price ladder with the cobalt level; STRUCTURE / LIQUIDITY / EXECUTION",
+        "Chest: embroidered Q. Sleeve: LIQUIDITY",
+        "Woven label: LiQ / DROP 001, garment number of 150"
+      ],
+      "gallery": [
+        ["label", "Interior woven label"],
+        ["chest", "Chest embroidery"],
+        ["ladder", "Back graphic, price ladder"],
+        ["knit", "Knit fabric texture"],
+        ["collar", "Rib knit collar"],
+        ["sleeve", "Sleeve print, LIQUIDITY"]
+      ],
+      "edition": "Limited to 150",
+      "options": [
+        { "name": "Colorway", "values": ["Washed Bone"] },
+        { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL", "XXXL"] }
+      ],
+      "colorways": {
+        "Washed Bone": {
+          "garment": "#cfc9bd",
+          "print": "#a8a196",
+          "micro": "#1b1b1e",
+          "note": "Drop 001 colorway"
+        }
+      }
+    },
+    {
+      "handle": "limited-atelier-jacket",
+      "title": "Limited Atelier Jacket",
+      "role": "The halo piece",
+      "status": "coming-soon",
+      "price": null,
+      "model": null,
+      "photos": false,
+      "summary": "About 420 GSM structured cotton twill, fully lined, an atelier edition of 50.",
+      "description": "The most subtle piece in the collection and the rarest. Tailored, boxy and cropped, with a tonal LiQ on the chest and back, and PRICE SEEKS LIQUIDITY beneath the back graphic.",
+      "details": [
+        "Structured cotton twill, about 420 GSM",
+        "Black",
+        "Tailored boxy, cropped fit with articulated sleeves",
+        "Two-way premium brushed-metal zipper, engraved LiQ",
+        "Zip hand pockets and an interior pocket",
+        "Premium satin lining, fully lined",
+        "Adjustable waist tabs with metal snap hardware",
+        "Chest: tonal LiQ embroidery with the cobalt line. Back: tonal LiQ, cobalt level, price ladder, PRICE SEEKS LIQUIDITY",
+        "Woven label: LiQ / DROP 001, garment number of 50"
+      ],
+      "gallery": [],
+      "edition": "Atelier edition of 50",
+      "options": [
+        { "name": "Colorway", "values": ["Black"] },
+        { "name": "Size", "values": ["XS", "S", "M", "L", "XL", "XXL"] }
+      ],
+      "colorways": {
+        "Black": { "garment": "#151517", "print": "#3a3a40", "micro": "#d8d1c1", "note": "Drop 001 colorway" }
       }
     },
     {
       "handle": "cap",
-      "title": "LiQ Cap",
+      "title": "Designer Cap",
       "role": "The accessory",
       "status": "coming-soon",
       "price": null,
       "model": "cap",
-      "summary": "Six-panel cap with the strike icon embroidered at the front.",
-      "description": "The Q crossing the line, on its own. The recurring device of the brand, set small and embroidered so it reads as a mark rather than a message.",
+      "photos": false,
+      "summary": "Black six-panel cap: JUST HIT A and the LiQ strike embroidered across the front.",
+      "description": "The mark at its loudest: the LiQ embroidered across the front with a cobalt candlestick and level, red candles falling from the Q, the three sessions on the side, and a chart printed under the brim.",
       "details": [
-        "Six-panel crown, pre-curved brim",
-        "Embroidered strike icon with cobalt level",
-        "Construction and closure to be confirmed at sampling"
+        "Black six-panel construction",
+        "Front: JUST HIT A and LiQ embroidery, cobalt candlestick and liquidity level, red candles from the Q",
+        "Left side: LIQUIDITY / STRUCTURE / EXECUTION. Right side: NY, LONDON and ASIA sessions",
+        "Under-brim candlestick chart print",
+        "Rear strap with brushed-metal LiQ buckle",
+        "Woven label: JUST HIT A LiQ / DROP 001, garment number of 150"
       ],
-      "edition": "Drop 001",
+      "gallery": [],
+      "edition": "Limited to 150",
       "options": [
-        { "name": "Colorway", "values": ["Washed Black", "Bone"] },
+        { "name": "Colorway", "values": ["Black"] },
         { "name": "Size", "values": ["One size"] }
       ],
       "colorways": {
-        "Washed Black": {
-          "garment": "#1b1b1e",
-          "print": "#4a4a51",
-          "micro": "#d8d1c1",
-          "note": "Launch colorway"
-        },
-        "Bone": { "garment": "#d9d2c3", "print": "#c4bcab", "micro": "#1b1b1e", "note": "Proposed edition" }
+        "Black": { "garment": "#151517", "print": "#4a4a51", "micro": "#d8d1c1", "note": "Drop 001 colorway" }
       }
     }
   ],
-  "later": ["Technical Zip Hoodie", "Structured Sweatpant", "Knit Long Sleeve", "Limited Atelier Jacket"]
+  "later": []
 }

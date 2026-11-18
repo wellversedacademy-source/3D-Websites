@@ -22,6 +22,8 @@ Stack: Vite + TypeScript + Three.js, static pages, one Cloudflare Worker.
 | `src/three/` | The 3D garment, stage and product viewer |
 | `src/commerce/` | Catalogue, bag, and the commerce-provider seam |
 | `worker/index.ts` | Cloudflare Worker: release-access sign-up endpoint |
+| `assets-src/boards/` | The owner's product boards (masters, not served) |
+| `public/photos/` | Product photos cut from the boards |
 | `public/` | Static files: models, renders, icons, Cloudflare `_headers` and `_redirects` |
 | `public/engine/` | The scroll-craft engine. Never edited per project. |
 | `scripts/` | Model generator and the render pipeline |
@@ -60,8 +62,11 @@ including the sign-up endpoint. Run `npm run build` first.
   `public/models/signature-hoodie.glb` (and a lighter `-m.glb`), see
   `docs/ASSETS.md` for the spec, then re-render stills:
   `npm run dev` in one terminal and `npm run posters` in another.
-- **Replace the mark:** update the shapes in `src/brand/mark.ts`, then
-  re-render stills the same way.
+- **Add or replace product photos:** put the board or photo in
+  `assets-src/boards/`, set its crop boxes in `scripts/crop-boards.mjs`, run
+  `node scripts/crop-boards.mjs`, and set `"photos": true` for that product.
+- **Replace the mark:** update `src/brand/mark.ts` (or the face in
+  `scripts/build-mark.mjs`), then re-render stills the same way.
 - **Social links / care email:** set the `VITE_SOCIAL_*` and `VITE_CARE_EMAIL`
   values (see `.env.example`). Empty values hide the link.
 

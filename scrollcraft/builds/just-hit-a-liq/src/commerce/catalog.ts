@@ -13,7 +13,12 @@ export type Product = {
   status: ProductStatus;
   /** Price in the store currency, or null when not yet set. Never guess one. */
   price: number | null;
-  model: string;
+  /** 3D model name in public/models, or null when none exists yet. */
+  model: string | null;
+  /** True when board photography exists in public/photos. */
+  photos: boolean;
+  /** Detail close-ups: [file key, caption]. */
+  gallery: [string, string][];
   summary: string;
   description: string;
   details: string[];
@@ -25,7 +30,7 @@ export type Product = {
 export const CURRENCY = 'USD';
 export const collection = data.collection;
 export const laterInDrop: string[] = data.later;
-export const products: Product[] = data.products as Product[];
+export const products: Product[] = data.products as unknown as Product[];
 
 export function getProduct(handle: string): Product | undefined {
   return products.find((p) => p.handle === handle);
@@ -57,4 +62,11 @@ export function priceLabel(p: Product): string {
 
 export function statusLabel(p: Product): string {
   return { available: 'Available', 'coming-soon': 'Coming soon', 'sold-out': 'Sold out' }[p.status];
+}
+
+/** Main image path (without extension) for cards and the bag, or null. */
+export function primaryImage(p: Product): string | null {
+  if (p.photos) return `/photos/${p.handle}-front`;
+  if (p.model) return `/renders/${p.handle}-card`;
+  return null;
 }

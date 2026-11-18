@@ -31,7 +31,7 @@ describe('catalog', () => {
         expect(p.colorways[c]).toBeDefined();
   });
   it('finds products by handle', () => {
-    expect(getProduct('signature-hoodie')?.title).toBe('Signature Hoodie');
+    expect(getProduct('signature-hoodie')?.title).toBe('Signature Heavyweight Hoodie');
   });
 });
 

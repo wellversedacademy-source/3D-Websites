@@ -153,7 +153,7 @@ function targetPose(y: number): { pose: Pose; active: string; local: number } {
 }
 
 // ----------------------------------------------------------------- ladder --
-const LEVEL = 4820;
+const LEVEL = 4370;
 const ladderLinks = $$<HTMLAnchorElement>('[data-ladder] a');
 const priceEl = $('[data-ladder-price]');
 const markerEl = $('[data-ladder-marker]');

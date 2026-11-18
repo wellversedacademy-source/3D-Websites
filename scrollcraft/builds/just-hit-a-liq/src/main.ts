@@ -7,7 +7,7 @@ import '@fontsource/ibm-plex-mono/500.css';
 import './styles/site.css';
 
 import { bag, MAX_QTY, type Line } from './commerce/cart';
-import { getProduct, parseVariantId, priceLabel } from './commerce/catalog';
+import { getProduct, parseVariantId, priceLabel, primaryImage } from './commerce/catalog';
 import { provider } from './commerce/provider';
 
 export const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) =>
@@ -26,7 +26,12 @@ export function renderLines(lines: Line[]): string {
       const v = parseVariantId(l.variantId)!;
       const p = getProduct(v.handle)!;
       return `<li class="line" data-line="${esc(l.variantId)}">
-        <img src="/renders/${p.handle}-card.webp" width="300" height="375" alt="" loading="lazy">
+        ${(() => {
+          const img = primaryImage(p);
+          return img
+            ? `<img src="${img}.webp" width="300" height="375" alt="" loading="lazy">`
+            : '<span class="line__noimg" aria-hidden="true"></span>';
+        })()}
         <div>
           <p class="line__title"><a href="/product/${p.handle}/">${esc(p.title)}</a></p>
           <p class="line__meta">${esc(v.colorway)} · ${esc(v.size)} · ${esc(priceLabel(p))}</p>

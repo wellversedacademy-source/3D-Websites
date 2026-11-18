@@ -78,8 +78,9 @@ split stage has no two-sided argument here.
 ## Signature move: the strike
 
 A price ladder doubles as chapter navigation. Scrolling lowers the price. When
-it crosses the cobalt level (4,820.00), the line runs across the viewport and
-continues the cobalt silicone line on the garment's back, which ignites, and
+it crosses the cobalt level (4,370.00, the level on the hoodie board), the line
+runs across the viewport and continues the cobalt silicone line on the
+garment's back, which ignites, and
 the page stamps `LIQUIDITY / SWEPT` with the visitor's own clock time. That
 time returns on the woven edition tag in the access form ("Your strike:
 21:14:07 EST") and is saved with a sign-up.

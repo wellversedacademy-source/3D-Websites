@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DecalGeometry } from 'three/addons/geometries/DecalGeometry.js';
-import { drawMark } from '../brand/mark';
+import { drawMark, Q_BOUNDS } from '../brand/mark';
 
 export const ACCENT = new THREE.Color('#3a63f2');
 
@@ -76,20 +76,23 @@ function fabricNormal(): THREE.CanvasTexture {
   return t;
 }
 
-const MARK_ASPECT = 160 / 228;
+// Back composition, in mark units (the mark is 300 units wide). Matches the
+// Signature Hoodie board: JUST HIT A above, the LiQ with the level through
+// it, a price ladder at the level's end, the session stamp below.
+const MARK_H = 172;
+const LADDER_X = 318;
+const LEVEL_Y = 79.7;
+const STEP = 22;
+const LADDER = [4380, 4378, 4376, 4374, 4372, 4370, 4368, 4366, 4364];
+const MICRO = { u0: -40, v0: -70, w: 440, h: 360 };
+const serif = (px: number, w = 500) => `${w} ${px}px "Bodoni Moda", "Didot", serif`;
+const mono = (px: number, w = 400) => `${w} ${px}px "IBM Plex Mono", ui-monospace, monospace`;
 
-/** Tonal graphite LiQ letters. The strike wick is drawn in its own layer. */
+/** Tonal LiQ letters and the candlestick i. */
 function printTexture(color: string): THREE.CanvasTexture {
-  const W = 1024;
-  const [c, g] = canvas(W, Math.round(W * MARK_ASPECT));
-  drawMark(g, 0, 0, W, { letters: color, level: null, strike: null });
-  return finish(c);
-}
-
-function strikeTexture(color: string): THREE.CanvasTexture {
-  const [c, g] = canvas(64, 256);
-  g.fillStyle = color;
-  g.fillRect(0, 0, 64, 256);
+  const W = 1200;
+  const [c, g] = canvas(W, Math.round((W * MARK_H) / 300));
+  drawMark(g, 0, 0, W, { letters: color });
   return finish(c);
 }
 
@@ -100,70 +103,79 @@ function solid(color: string): THREE.CanvasTexture {
   return finish(c);
 }
 
-/** Bone microtype: the copy above and below the mark, and the price ladder. */
+/** Bone microtype: JUST HIT A, the price ladder, the session stamp. */
 function microTexture(color: string): THREE.CanvasTexture {
-  const W = 1536;
-  const H = 1536;
-  const [c, g] = canvas(W, H);
+  const K = 4; // pixels per mark unit
+  const [c, g] = canvas(MICRO.w * K, MICRO.h * K);
+  g.scale(K, K);
+  g.translate(-MICRO.u0, -MICRO.v0);
   g.fillStyle = color;
-  g.textBaseline = 'alphabetic';
-  const mono = (px: number, w = 500) => `${w} ${px}px "IBM Plex Mono", ui-monospace, monospace`;
-  // Layout is in a 1536px square that maps to 0.5 m x 0.5 m of garment back.
-  g.font = mono(30);
-  g.letterSpacing = '6px';
-  g.fillText('JUST HIT A', 220, 300);
-  g.font = mono(26);
-  g.fillText('LIQUIDITY / SWEPT', 220, 1130);
-  g.fillText('NY SESSION', 220, 1172);
-  g.fillText('09:42:17', 220, 1214);
-  // Price ladder near the side seam.
-  g.font = mono(20, 400);
-  g.letterSpacing = '2px';
-  const top = 330;
-  for (let i = 0; i < 26; i++) {
-    const y = top + i * 34;
-    const price = (4861.25 - i * 3.25).toFixed(2);
-    g.fillRect(1290, y - 6, i % 4 === 0 ? 26 : 12, 2);
-    if (i % 2 === 0) g.fillText(price.replace(/\B(?=(\d{3})+(?!\d))/, ','), 1330, y);
-  }
+  g.strokeStyle = color;
+  g.textAlign = 'center';
+  g.font = serif(15);
+  g.letterSpacing = '7px';
+  g.fillText('JUST HIT A', 128, -26);
+  g.font = serif(11);
+  g.letterSpacing = '4.5px';
+  g.fillText('LIQUIDITY / SWEPT', 128, 206);
+  g.fillText('NY SESSION', 128, 228);
+  g.fillText('09:42:17', 128, 250);
+  // Ladder: spine, ticks, prices.
+  const top = LEVEL_Y - 5 * STEP;
+  g.lineWidth = 0.9;
+  g.beginPath();
+  g.moveTo(LADDER_X, top - 6);
+  g.lineTo(LADDER_X, top + 8 * STEP + 6);
+  g.stroke();
+  g.textAlign = 'left';
+  g.font = mono(7.5);
+  g.letterSpacing = '0.6px';
+  LADDER.forEach((v, i) => {
+    const y = top + i * STEP;
+    g.fillRect(LADDER_X, y - 0.45, 6, 0.9);
+    g.fillText(v.toFixed(2), LADDER_X + 10, y + 2.6);
+  });
   return finish(c);
 }
 
-function chestTexture(ink: string): THREE.CanvasTexture {
-  const W = 512;
-  const [c, g] = canvas(W, Math.round(W * (160 / 300)));
-  drawMark(g, 0, 0, W * (228 / 300), {
-    letters: ink,
-    level: ACCENT.getStyle(),
-    strike: ink,
-    levelWidth: 300,
-  });
+/** The Q crossed by the level, cropped tight: chest and cuff embroidery. */
+const QBOX = {
+  u0: Q_BOUNDS.x1 - 14,
+  v0: Q_BOUNDS.y1 - 10,
+  w: Q_BOUNDS.x2 - Q_BOUNDS.x1 + 28,
+  h: Q_BOUNDS.y2 - Q_BOUNDS.y1 + 20,
+};
+function qTexture(ink: string, diagonal = false): THREE.CanvasTexture {
+  const K = 4;
+  const [c, g] = canvas(Math.round(QBOX.w * K), Math.round(QBOX.h * K));
+  g.scale(K, K);
+  g.translate(-QBOX.u0, -QBOX.v0);
+  drawMark(g, 0, 0, 300, { letters: ink, qOnly: true });
+  g.fillStyle = ACCENT.getStyle();
+  if (diagonal) {
+    g.save();
+    g.translate((Q_BOUNDS.x1 + Q_BOUNDS.x2) / 2, LEVEL_Y + 6);
+    g.rotate(-0.32);
+    g.fillRect(-QBOX.w / 2, -2, QBOX.w, 4);
+    g.restore();
+  } else g.fillRect(QBOX.u0 + 2, LEVEL_Y - 2, QBOX.w - 4, 4);
+  return finish(c);
+}
+
+function capTexture(ink: string): THREE.CanvasTexture {
+  const W = 900;
+  const [c, g] = canvas(W, Math.round((W * MARK_H) / 300));
+  drawMark(g, 0, 0, W, { letters: ink, level: ACCENT.getStyle() });
   return finish(c);
 }
 
 function sleeveTexture(color: string): THREE.CanvasTexture {
   const [c, g] = canvas(1024, 128);
   g.fillStyle = color;
-  g.font = '500 76px "IBM Plex Mono", ui-monospace, monospace';
-  g.letterSpacing = '22px';
+  g.font = serif(58);
+  g.letterSpacing = '26px';
   g.textBaseline = 'middle';
   g.fillText('LIQUIDITY', 20, 66);
-  return finish(c);
-}
-
-function cuffTexture(ink: string): THREE.CanvasTexture {
-  const [c, g] = canvas(256, 256);
-  // Just the Q and its strike, centred.
-  g.fillStyle = ink;
-  g.beginPath();
-  g.roundRect(68, 40, 120, 128, 20);
-  g.roundRect(88, 60, 80, 88, 8);
-  g.fill('evenodd');
-  g.fillRect(125, 14, 6, 26);
-  g.fillStyle = ACCENT.getStyle();
-  g.fillRect(0, 183, 256, 7);
-  g.fillStyle = ink;
-  g.fillRect(155, 168, 10, 50);
   return finish(c);
 }
 
@@ -187,6 +199,7 @@ export async function loadGarment(
   await Promise.all([
     document.fonts?.load('500 30px "IBM Plex Mono"'),
     document.fonts?.load('400 20px "IBM Plex Mono"'),
+    document.fonts?.load('500 30px "Bodoni Moda"'),
   ]).catch(() => undefined);
   const gltf = await loader.loadAsync(url);
   let body: THREE.Mesh | null = null;
@@ -250,18 +263,15 @@ export async function loadGarment(
   const outFront = new THREE.Vector3(0, 0, 1);
 
   if (isHoodie || isTee) {
-    // Back composition. Tech pack: 355 mm wide, centre 22 mm right of the
-    // garment centreline (seen from behind, that is world -X).
-    const w = 0.355;
-    const h = w * MARK_ASPECT;
-    const cx = -0.022;
-    const cy = isHoodie ? -0.15 : -0.12;
-    const left = cx + w / 2; // the L sits at viewer-left, world +X
-    const unit = w / 228;
+    // Back composition, 355 mm wide (Phase 7 tech pack), centred as on the
+    // product boards. k converts mark units to metres.
+    const k = 0.355 / 300;
+    const cy = isHoodie ? -0.17 : -0.13;
     const zBack = -0.2;
-    // Level: from the L across the Q and on to the side seam.
-    const levelY = cy + h / 2 - (128 + 2) * unit;
-    const levelLen = 0.5;
+    // Seen from behind, the viewer's right is world -X.
+    const wx = (u: number) => -(u - 128) * k;
+    const wy = (v: number) => cy - (v - 90) * k;
+    // Level: through the letters, on to the price ladder.
     add(
       'level',
       decalMat(solid('#ffffff'), {
@@ -270,9 +280,9 @@ export async function loadGarment(
         emissiveIntensity: 0.25,
         roughness: 0.55,
       }),
-      new THREE.Vector3(left - levelLen / 2, levelY, zBack),
+      new THREE.Vector3(wx(157), wy(LEVEL_Y), zBack),
       back,
-      new THREE.Vector3(levelLen, 4 * unit, 0.5),
+      new THREE.Vector3(326 * k, 3.6 * k, 0.5),
       outBack,
       0.16,
       3,
@@ -280,43 +290,31 @@ export async function loadGarment(
     add(
       'print',
       decalMat(printTexture(opts.palette.print), { roughness: 0.7 }),
-      new THREE.Vector3(cx, cy, zBack),
+      new THREE.Vector3(wx(150), wy(MARK_H / 2), zBack),
       back,
-      new THREE.Vector3(w, h, 0.4),
+      new THREE.Vector3(300 * k, MARK_H * k, 0.4),
       outBack,
       0.08,
       2,
     );
-    // The strike: the Q's lower wick, laid over the level.
-    const sx = left - (198 + 3) * unit;
-    const sy = cy + h / 2 - (118 + 17) * unit;
-    add(
-      'strike',
-      decalMat(strikeTexture(opts.palette.print), { roughness: 0.7 }),
-      new THREE.Vector3(sx, sy, zBack),
-      back,
-      new THREE.Vector3(6 * unit, 34 * unit, 0.4),
-      outBack,
-      0.16,
-      4,
-    );
     add(
       'micro',
       decalMat(microTexture(opts.palette.micro), { roughness: 0.75 }),
-      new THREE.Vector3(cx - 0.02, cy - 0.06, zBack),
+      new THREE.Vector3(wx(MICRO.u0 + MICRO.w / 2), wy(MICRO.v0 + MICRO.h / 2), zBack),
       back,
-      new THREE.Vector3(0.5, 0.5, 0.4),
+      new THREE.Vector3(MICRO.w * k, MICRO.h * k, 0.4),
       outBack,
       0.24,
       2,
     );
-    // Chest: about 1.5 in over the heart (wearer's left, world +X).
+    // Chest: the Q and its level, about 40 mm tall, over the heart (world +X).
+    const qh = 0.04;
     add(
       'chest',
-      decalMat(chestTexture(opts.palette.print), { roughness: 0.62 }),
+      decalMat(qTexture(opts.palette.print), { roughness: 0.62 }),
       new THREE.Vector3(0.13, isHoodie ? 0.12 : 0.1, 0.2),
       front,
-      new THREE.Vector3(0.048, 0.048 * (160 / 300), 0.2),
+      new THREE.Vector3((qh * QBOX.w) / QBOX.h, qh, 0.2),
       outFront,
       0.1,
       2,
@@ -335,10 +333,10 @@ export async function loadGarment(
     );
     add(
       'cuff',
-      decalMat(cuffTexture(opts.palette.micro), { roughness: 0.7 }),
+      decalMat(qTexture(opts.palette.print, true), { roughness: 0.7 }),
       new THREE.Vector3(-0.46, -0.412, 0.06),
       new THREE.Euler(0, -Math.PI / 2, 0),
-      new THREE.Vector3(0.03, 0.03, 0.2),
+      new THREE.Vector3((0.032 * QBOX.w) / QBOX.h, 0.032, 0.2),
       new THREE.Vector3(-1, 0, 0),
       0.08,
       2,
@@ -347,10 +345,10 @@ export async function loadGarment(
   if (model === 'cap') {
     add(
       'chest',
-      decalMat(chestTexture(opts.palette.print), { roughness: 0.62 }),
+      decalMat(capTexture(opts.palette.micro), { roughness: 0.62 }),
       new THREE.Vector3(0, 0.045, 0.12),
       new THREE.Euler(-0.35, 0, 0),
-      new THREE.Vector3(0.07, 0.07 * (160 / 300), 0.1),
+      new THREE.Vector3(0.09, (0.09 * MARK_H) / 300, 0.1),
       outFront,
       0.05,
       2,
@@ -367,11 +365,10 @@ export async function loadGarment(
       const mat = L.mesh.material as THREE.MeshStandardMaterial;
       const old = mat.map;
       if (L.id === 'print') mat.map = printTexture(p.print);
-      else if (L.id === 'strike') mat.map = strikeTexture(p.print);
       else if (L.id === 'micro') mat.map = microTexture(p.micro);
-      else if (L.id === 'chest') mat.map = chestTexture(p.print);
+      else if (L.id === 'chest') mat.map = model === 'cap' ? capTexture(p.micro) : qTexture(p.print);
       else if (L.id === 'sleeve') mat.map = sleeveTexture(p.micro);
-      else if (L.id === 'cuff') mat.map = cuffTexture(p.micro);
+      else if (L.id === 'cuff') mat.map = qTexture(p.print, true);
       else continue;
       old?.dispose();
       mat.needsUpdate = true;

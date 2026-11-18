@@ -45,7 +45,7 @@ export function mountViewer(
   el: HTMLElement,
   model: string,
   palette: Palette,
-  opts: { capture?: string | null } = {},
+  opts: { capture?: string | null; eager?: boolean } = {},
 ): Promise<Viewer | null> {
   return new Promise((resolve) => {
     if (!webglAvailable()) return resolve(null);
@@ -99,6 +99,10 @@ export function mountViewer(
 
       const loop = () => {
         requestAnimationFrame(loop);
+        // Pause drawing while a photo is showing instead of the 3D view.
+        const on = el.hasAttribute('data-3d');
+        stage.setVisible(on);
+        if (!on) return;
         spin += (drag - spin) * (reduced ? 1 : 0.15);
         current = reduced ? target : mixPose(current, target, 0.1);
         stage.setPose({ ...current, rot: current.rot + spin });
@@ -112,7 +116,7 @@ export function mountViewer(
       el.setAttribute('data-live', '');
       resolve({ setView, setPalette: (p) => stage.setPalette(p) });
     };
-    if (opts.capture) return void start();
+    if (opts.capture || opts.eager) return void start();
     const io = new IntersectionObserver(
       (es) => {
         if (es.some((e) => e.isIntersecting)) {
